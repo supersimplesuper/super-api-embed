@@ -1,4 +1,4 @@
-name: Typescript Library Starter
+name: super-api-embed
 
 on: [push]
 
@@ -100,23 +100,9 @@ jobs:
       - name: ⚡ Tests
         run: npm run test:coverage
 
-  test-setup:
-    name: ⚡ Setup tests
-    runs-on: ubuntu-latest
-    needs: [dependencies]
-    steps:
-      - uses: actions/checkout@v4
-      - uses: actions/setup-node@v4
-        with:
-          node-version-file: package.json
-          cache: "npm"
-      - run: npm ci
-      - name: ⚡ Tests
-        run: npm run test:setup
-
   build-and-release:
     name: 🚀 Build & release
-    needs: [lint, audit, format, spell, type, test, test-setup]
+    needs: [lint, audit, format, spell, type, test]
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4

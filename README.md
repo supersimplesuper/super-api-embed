@@ -1,37 +1,25 @@
-# TypeScript Library Starter
+# SuperAPI Embed
 
-![NPM](https://img.shields.io/npm/l/@gjuchault/typescript-library-starter)
 ![NPM](https://img.shields.io/npm/v/@gjuchault/typescript-library-starter)
 ![GitHub Workflow Status](https://github.com/gjuchault/typescript-library-starter/actions/workflows/typescript-library-starter.yml/badge.svg?branch=main)
 
-Yet another (opinionated) TypeScript library starter template.
+This is a JavaScript wrapper around the SuperAPI UI embed. It is designed to make interacting with the embed in the frontend easier.
 
-If you're looking for a backend service starter, check out my [typescript-service-starter](https://github.com/gjuchault/typescript-service-starter)
+## Development
 
-## Opinions and limitations
+### Getting started
 
-1. Relies as much as possible on each included library's defaults
-2. Only relies on GitHub Actions
-3. Does not include documentation generation
-
-## Getting started
-
-1. `npx degit gjuchault/typescript-library-starter my-project` or click on the `Use this template` button on GitHub!
-2. `cd my-project`
-3. `npm install`
-4. `git init` (if you used degit)
-5. `npm run setup`
+1. `npm install`
+2. `npm run setup`
 
 To enable deployment, you will need to:
 
 1. Set up the `NPM_TOKEN` secret in GitHub Actions ([Settings > Secrets > Actions](https://github.com/gjuchault/typescript-library-starter/settings/secrets/actions))
 2. Give `GITHUB_TOKEN` write permissions for GitHub releases ([Settings > Actions > General](https://github.com/gjuchault/typescript-library-starter/settings/actions) > Workflow permissions)
 
-## Features
+### ASDF
 
-### Node.js, npm version
-
-TypeScript Library Starter relies on [Volta](https://volta.sh/) to ensure the Node.js version is consistent across developers. It's also used in the GitHub workflow file.
+We use ASDF to mange the versions of tools required for development on this library.
 
 ### TypeScript
 
