@@ -10,7 +10,10 @@
     "rmrf",
     "ryansonshine",
     "socio",
-    "tsdoc"
+    "tsdoc",
+    "loglevel",
+    "superapi",
+    "testid"
   ],
   "flagWords": [],
   "ignorePaths": [
