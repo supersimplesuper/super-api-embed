@@ -1,7 +1,7 @@
 # SuperAPI Embed
 
 ![NPM](https://img.shields.io/npm/v/supersimplesuper/super-api-embed)
-![GitHub Workflow Status](https://github.com/supersimplesuper/super-api-embed/actions/workflows/typescript-library-starter.yml/badge.svg?branch=main)
+![GitHub Workflow Status](https://github.com/supersimplesuper/super-api-embed/actions/workflows/super-api-embed.yml/badge.svg?branch=main)
 
 This is a JavaScript wrapper around the SuperAPI UI embed. It is designed to make interacting with the embed in the frontend easier.
 
