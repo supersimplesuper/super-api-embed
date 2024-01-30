@@ -1,11 +1,25 @@
 # SuperAPI Embed
 
-![NPM](https://img.shields.io/npm/v/@gjuchault/typescript-library-starter)
-![GitHub Workflow Status](https://github.com/gjuchault/typescript-library-starter/actions/workflows/typescript-library-starter.yml/badge.svg?branch=main)
+![NPM](https://img.shields.io/npm/v/supersimplesuper/super-api-embed)
+![GitHub Workflow Status](https://github.com/supersimplesuper/super-api-embed/actions/workflows/typescript-library-starter.yml/badge.svg?branch=main)
 
 This is a JavaScript wrapper around the SuperAPI UI embed. It is designed to make interacting with the embed in the frontend easier.
 
-## Development
+## Usage
+
+### Installation
+
+```bash
+npm install @superapi/super-api-embed
+```
+
+### Creating your first embed
+
+```javascript
+
+```
+
+## Contributing
 
 ### Getting started
 
@@ -19,12 +33,15 @@ To enable deployment, you will need to:
 
 ### ASDF
 
-We use ASDF to mange the versions of tools required for development on this library.
+We use ASDF to mange the versions of tools required for development on this library. Install ASDF and the NodeJS plugin then run
+
+```bash
+asdf install
+```
+
+In the root directory to install the correct version of NodeJS.
 
 ### TypeScript
-
-Leverages [esbuild](https://github.com/evanw/esbuild) for blazing-fast builds but keeps `tsc` to generate `.d.ts` files.
-Generates a single ESM build.
 
 Commands:
 
@@ -45,9 +62,6 @@ Commands:
 - `test:coverage`: runs test runner and generates coverage reports
 
 ### Format & lint
-
-This template relies on the combination of [ESLint](https://github.com/eslint/eslint) — through [TypeScript-ESLint](https://github.com/typescript-eslint/typescript-eslint) for linting, and [Prettier](https://github.com/prettier/prettier) for formatting.
-It also uses [cspell](https://github.com/streetsidesoftware/cspell) to ensure correct spelling.
 
 Commands:
 

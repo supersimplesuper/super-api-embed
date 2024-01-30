@@ -1,10 +1,10 @@
 {
   "include": ["./src/**/*.ts"],
   "compilerOptions": {
-    "lib": ["es2023"],
-    "module": "nodenext",
+    "lib": ["es2023", "dom"],
+    "module": "ESNext",
     "target": "es2022",
-    "moduleResolution": "nodenext",
+    "moduleResolution": "bundler",
 
     "rootDir": "./src",
     "outDir": "build",
