@@ -13,23 +13,30 @@ This is a JavaScript wrapper around the SuperAPI UI embed. It is designed to mak
 npm install @superapi/super-api-embed
 ```
 
-### Creating your first embed
+### Creating an embed
 
-```javascript
+Using Typescript:
 
+```typescript
+import { Embed, MESSAGE_KIND } from "./index";
+
+// The element that we will place the embed into
+const element = window.document.getElementById("myEmbed");
+
+// Create the embed and store a reference to it
+const embed = new Embed({
+  url: "https://www.example.com/",
+});
+
+// Listen for toast messages from SuperAPI and alert the user
+embed.on(MESSAGE_KIND.TOAST, (data) => {
+  if (data.kind === "warning") {
+    alert(data.message);
+  }
+});
 ```
 
 ## Contributing
-
-### Getting started
-
-1. `npm install`
-2. `npm run setup`
-
-To enable deployment, you will need to:
-
-1. Set up the `NPM_TOKEN` secret in GitHub Actions ([Settings > Secrets > Actions](https://github.com/gjuchault/typescript-library-starter/settings/secrets/actions))
-2. Give `GITHUB_TOKEN` write permissions for GitHub releases ([Settings > Actions > General](https://github.com/gjuchault/typescript-library-starter/settings/actions) > Workflow permissions)
 
 ### ASDF
 
