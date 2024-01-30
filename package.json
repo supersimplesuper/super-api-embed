@@ -16,6 +16,10 @@
   "publishConfig": {
     "access": "public"
   },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/supersimplesuper/super-api-embed.git"
+  },
   "scripts": {
     "build": "npm run clean && npm run type:dts && npm run type:extract && npm run build:src",
     "build:src": "node --import=@nitrogql/esbuild-register ./scripts/build.ts",
