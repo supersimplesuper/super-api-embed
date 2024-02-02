@@ -3,8 +3,8 @@ import log from "loglevel";
 
 // What origins are we allowed to receive messages from
 const allowedOrigins = [
-  "https://v2.superapi.com.au",
   "https://api.superapi.com.au",
+  "https://v2.superapi.com.au",
 ];
 
 // Controls the kind of options that we're allowed to pass into the embed to
