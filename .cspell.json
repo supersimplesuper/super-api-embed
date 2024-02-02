@@ -1,19 +1,20 @@
 {
   "version": "0.2",
-  "language": "en",
+  "language": "en-GB",
   "words": [
     "degit",
     "esbuild",
-    "super-api-embed",
+    "loglevel",
     "octocat",
     "outdir",
     "rmrf",
     "ryansonshine",
     "socio",
-    "tsdoc",
-    "loglevel",
+    "super-api-embed",
     "superapi",
-    "testid"
+    "teardown",
+    "testid",
+    "tsdoc"
   ],
   "flagWords": [],
   "ignorePaths": [
