@@ -10,28 +10,16 @@ async function build() {
   const buildId = randomUUID().replace(/-/g, "");
 
   return esbuild({
-    platform: "node",
-    target: "node21",
+    platform: "browser",
+    target: "es2020",
     format: "esm",
     nodePaths: [srcPath],
     sourcemap: true,
     external: [],
     bundle: true,
     entryPoints: [path.join(srcPath, "index.ts")],
-    banner: {
-      js: `
-            import { createRequire as createRequire${buildId} } from 'module';
-            import { fileURLToPath as fileURLToPath${buildId} } from 'url';
-            import { dirname as dirname${buildId} } from 'path';
-
-            // using var here to allow subsequent override by authors of this
-            // library that would be using the same ESM trick
-            var require = createRequire${buildId}(import.meta.url);
-            var __filename = fileURLToPath${buildId}(import.meta.url);
-            var __dirname = dirname${buildId}(__filename);
-      `,
-    },
     outdir: buildPath,
+    minify: true,
   });
 }
 
