@@ -80,15 +80,17 @@ Fired when a notification message should be shown to the user, i.e. when they ha
 
 The data component of this event contains:
 
-| Name | Description |
-| kind | The level of the toast, one of either "success", "error", "info" or "warning" |
-| message | The content of the message, i.e. "Thank you for your selection" |
+| Name    | Description                                                                   |
+| ------- | ----------------------------------------------------------------------------- |
+| kind    | The level of the toast, one of either "success", "error", "info" or "warning" |
+| message | The content of the message, i.e. "Thank you for your selection"               |
 
 #### Window dimension change
 
 Fired when the DOM contents of the embed has changed. Not all DOM mutations will change the actual height but most will.
 
-| Name | Description |
+| Name   | Description                                                      |
+| ------ | ---------------------------------------------------------------- |
 | bounds | A `DOMRect` instance which contains the dimensions of the widget |
 
 #### Employer settings committed
