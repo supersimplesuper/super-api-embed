@@ -5,10 +5,8 @@
     "module": "ESNext",
     "target": "es2022",
     "moduleResolution": "bundler",
-
     "rootDir": "./src",
     "outDir": "build",
-
     "strict": true,
     "noUncheckedIndexedAccess": true,
     "sourceMap": true,
