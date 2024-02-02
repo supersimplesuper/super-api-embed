@@ -11,8 +11,8 @@ const allowedOrigins = [
 // configure it.
 export type Options = {
   element: HTMLElement;
-  url: string;
   loaderClass?: string;
+  url: string;
 };
 
 export enum MESSAGE_KIND {
