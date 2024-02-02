@@ -1,6 +1,6 @@
 {
   "name": "@super-api/super-api-embed",
-  "version": "1.0.0",
+  "version": "1.0.2",
   "type": "module",
   "exports": "./build/index.js",
   "types": "./build/index.d.ts",
