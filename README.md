@@ -87,7 +87,7 @@ The data component of this event contains:
 
 #### Window dimension change
 
-Fired when the DOM contents of the embed has changed. Not all DOM mutations will change the actual height but most will.
+Fired when the DOM contents of the embed has changed and caused the height of the embed to change.
 
 | Name   | Description                                                      |
 | ------ | ---------------------------------------------------------------- |
