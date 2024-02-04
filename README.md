@@ -103,6 +103,64 @@ Fired when a user has completed the onboarding flow and the information has been
 
 ## Use with React
 
+While the SuperAPI JS library is not specifically designed to be used with React it is easy to integrate with some use of `useEffect` and a `ref` on a dom node.
+
+```typescript
+// Create a ref that will be used to contain the embed
+const embedRef = React.useRef<null | HTMLDivElement>(null);
+
+// And a state which is used to hold the instance of the embed
+const [embed, setEmbed] = React.useState<null | Embed>(null);
+
+React.useEffect(() => {
+  // Ensure that we have a dom node to target with the embed and that the
+  // embed is not already loaded
+  if (embedRef.current === null || embed !== null) {
+    return;
+  }
+
+  // Create the embed with the reference to the dom node and the URL
+  const employerSettingsEmbed = new Embed({
+    element: embedRef.current,
+    url: embedUrl,
+  });
+
+  // Handle toast message being broadcast and show them using our custom toast
+  // message displayer (this ensures that toast messages look native to our
+  // application)
+  employerSettingsEmbed.on(MESSAGE_KIND.TOAST, (data: any) => {
+    if (data.kind === "info") {
+      toast(data.message);
+    }
+
+    if (data.kind === "success") {
+      toast.success(data.message);
+    }
+  });
+
+  // Listener for when the employer settings have been committed back to our
+  // application. The `onSelection` callback will display a "continue" button
+  // to the user once they have set their default fund.
+  employerSettingsEmbed.on(MESSAGE_KIND.EMPLOYER_SETTINGS_COMMITTED, () => {
+    if (onSelection) {
+      onSelection();
+    }
+  });
+
+  // Finally, store a reference to the embed. This allows us to call methods on
+  // it from elsewhere in our component if we require.
+  setEmbed(employerSettingsEmbed);
+
+  // When the component is unloaded, call the teardown function which will
+  // automatically remove the event listeners we bound in the code above
+  return () => {
+    if (embed !== null) {
+      (embed as Embed).teardown();
+    }
+  };
+}, [embed, onSelection, embedUrl]);
+```
+
 ## Contributing
 
 ### ASDF
