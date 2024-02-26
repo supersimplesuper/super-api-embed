@@ -43,10 +43,6 @@ The `Embed` class can be invoked with the following parameters:
 
 Once the loader has been setup you can then interact with returned instance of the embed.
 
-### Automatic resizing
-
-The embed emits an event each time the DOM content has been modified, this event is then _debounced_ with a 300ms delay to avoid overwhelming any event listeners that might be bound to listen to it. The embed internally listens to this resize event and will automatically adjust the height of the iFrame element to try and match the content. If required, you can constraint the height of the iFrame with a `max-height` CSS property and the contents of the iFrame will automatically scroll to accommodate the content.
-
 ### Events
 
 The embed emits a number of useful events that can be listened to. All events have the following data structure at the top level:
