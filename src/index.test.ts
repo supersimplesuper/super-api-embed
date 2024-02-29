@@ -68,6 +68,13 @@ describe("Embed", () => {
       fireEvent(iframe, new Event("load"));
       expect(element).not.toContainElement(loader);
     });
+
+    it("when the iframe has loaded, it removes the loader element", () => {
+      const scope = within(element);
+      const iframe = scope.getByTestId("iframe");
+      fireEvent(iframe, new Event("load"));
+      expect(iframe).toHaveAttribute("height", "100%");
+    });
   });
 
   describe("teardown", () => {
