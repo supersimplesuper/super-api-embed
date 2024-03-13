@@ -178,11 +178,11 @@ describe("Embed", () => {
         const listener = jest.fn();
 
         const data = {
-          kind: MESSAGE_KIND.ONBOARDING_SESSION_COMPLETE_COMMITTED,
+          kind: MESSAGE_KIND.ONBOARDING_SESSION_COMMITTED,
           data: {},
         };
 
-        embed.on(MESSAGE_KIND.ONBOARDING_SESSION_COMPLETE_COMMITTED, listener);
+        embed.on(MESSAGE_KIND.ONBOARDING_SESSION_COMMITTED, listener);
 
         fireEvent(
           window,

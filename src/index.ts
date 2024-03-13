@@ -1,11 +1,56 @@
 import { EventEmitter } from "eventemitter3";
 import log from "loglevel";
 
+import { MESSAGE_KIND } from "./services/messages";
+import {
+  Data as EmployerSettingsCommittedDataV1,
+  Message as EmployerSettingsCommittedMessageV1,
+} from "./services/messages/v1/employer_settings_committed";
+import {
+  Data as OnboardingSessionCommittedDataV1,
+  Message as OnboardingSessionCommittedMessageV1,
+} from "./services/messages/v1/onboarding_session_committed";
+import {
+  Data as OnboardingSessionFinishedDataV1,
+  Message as OnboardingSessionFinishedMessageV1,
+} from "./services/messages/v1/onboarding_session_finished";
+import {
+  Data as ToastMessageDataV1,
+  Kind as ToastKindV1,
+  Message as ToastMessageV1,
+} from "./services/messages/v1/toast";
+import {
+  Data as WindowDimensionChangeMessageDataV1,
+  Message as WindowDimensionChangeMessageV1,
+} from "./services/messages/v1/window_dimension_change";
+
+export { MESSAGE_KIND };
+export { EmployerSettingsCommittedDataV1, EmployerSettingsCommittedMessageV1 };
+export {
+  OnboardingSessionCommittedDataV1,
+  OnboardingSessionCommittedMessageV1,
+};
+export { OnboardingSessionFinishedDataV1, OnboardingSessionFinishedMessageV1 };
+export { ToastKindV1, ToastMessageDataV1, ToastMessageV1 };
+export { WindowDimensionChangeMessageDataV1, WindowDimensionChangeMessageV1 };
+
+export type AvailableMessages =
+  | EmployerSettingsCommittedMessageV1
+  | OnboardingSessionCommittedMessageV1
+  | OnboardingSessionFinishedMessageV1
+  | ToastMessageV1
+  | WindowDimensionChangeMessageV1;
+
+export type MessageKindToTypeMap = {
+  [MESSAGE_KIND.EMPLOYER_SETTINGS_COMMITTED]: EmployerSettingsCommittedMessageV1;
+  [MESSAGE_KIND.ONBOARDING_SESSION_COMMITTED]: OnboardingSessionCommittedMessageV1;
+  [MESSAGE_KIND.ONBOARDING_SESSION_FINISHED]: OnboardingSessionFinishedMessageV1;
+  [MESSAGE_KIND.TOAST]: ToastMessageV1;
+  [MESSAGE_KIND.WINDOW_DIMENSION_CHANGE]: WindowDimensionChangeMessageV1;
+};
+
 // What origins are we allowed to receive messages from
-const allowedOrigins = [
-  "https://api.superapi.com.au",
-  "https://v2.superapi.com.au",
-];
+const allowedOrigins = ["https://api.superapi.com.au"];
 
 // Controls the kind of options that we're allowed to pass into the embed to
 // configure it.
@@ -14,48 +59,6 @@ export type Options = {
   loaderClass?: string;
   url: string;
 };
-
-export enum MESSAGE_KIND {
-  EMPLOYER_SETTINGS_COMMITTED = "employerSettingsCommitted",
-  ONBOARDING_SESSION_COMPLETE_COMMITTED = "onboardingSessionCompleteCommitted",
-  TOAST = "toast",
-  WINDOW_DIMENSION_CHANGE = "windowDimensionChange",
-}
-
-export type employerSettingsCommittedPayloadV1 = {
-  kind: MESSAGE_KIND.EMPLOYER_SETTINGS_COMMITTED;
-  version: "v1";
-  data: Record<string, never>;
-};
-
-export type onboardingSessionCompleteCommittedPayloadV1 = {
-  kind: MESSAGE_KIND.ONBOARDING_SESSION_COMPLETE_COMMITTED;
-  version: "v1";
-  data: Record<string, never>;
-};
-
-export type ToastMessagePayloadV1 = {
-  kind: MESSAGE_KIND.TOAST;
-  version: "v1";
-  data: {
-    kind: "success" | "error" | "info" | "warning";
-    message: string;
-  };
-};
-
-export type windowDimensionChangePayloadV1 = {
-  kind: MESSAGE_KIND.WINDOW_DIMENSION_CHANGE;
-  version: "v1";
-  data: {
-    bounds: DOMRect;
-  };
-};
-
-export type AvailablePayloads =
-  | ToastMessagePayloadV1
-  | windowDimensionChangePayloadV1
-  | employerSettingsCommittedPayloadV1
-  | onboardingSessionCompleteCommittedPayloadV1;
 
 export class Embed {
   // The constructed iFrame element that will show the `url`
@@ -121,19 +124,28 @@ export class Embed {
     this.bus.removeAllListeners();
   }
 
-  public on(event: MESSAGE_KIND, cb: (data: AvailablePayloads) => void) {
+  public on<K extends MESSAGE_KIND>(
+    event: K,
+    cb: (data: MessageKindToTypeMap[K]) => void,
+  ) {
     return this.bus.on(event, cb);
   }
 
-  public off(event: MESSAGE_KIND, cb: (data: AvailablePayloads) => void) {
+  public off<K extends MESSAGE_KIND>(
+    event: K,
+    cb: (data: MessageKindToTypeMap[K]) => void,
+  ) {
     return this.bus.off(event, cb);
   }
 
-  public once(event: MESSAGE_KIND, cb: (data: AvailablePayloads) => void) {
+  public once<K extends MESSAGE_KIND>(
+    event: K,
+    cb: (data: MessageKindToTypeMap[K]) => void,
+  ) {
     return this.bus.once(event, cb);
   }
 
-  private handleMessage(event: MessageEvent<AvailablePayloads>) {
+  private handleMessage(event: MessageEvent<AvailableMessages>) {
     if (allowedOrigins.includes(event.origin) !== true) {
       log.warn(
         `Message heard from unknown origin and will be ignored, was: ${event.origin}`,
@@ -146,14 +158,20 @@ export class Embed {
     );
 
     // Here we react to any messages that need to be handled from within the
-    // embed code.
+    // embed code (currently we don't do anything in particular based on an
+    // incoming message before we hand it over)
     switch (event.data.kind) {
       case MESSAGE_KIND.EMPLOYER_SETTINGS_COMMITTED: {
         this.bus.emit(event.data.kind, event.data.data);
         break;
       }
 
-      case MESSAGE_KIND.ONBOARDING_SESSION_COMPLETE_COMMITTED: {
+      case MESSAGE_KIND.ONBOARDING_SESSION_COMMITTED: {
+        this.bus.emit(event.data.kind, event.data.data);
+        break;
+      }
+
+      case MESSAGE_KIND.ONBOARDING_SESSION_FINISHED: {
         this.bus.emit(event.data.kind, event.data.data);
         break;
       }
