@@ -93,9 +93,13 @@ Fired when the DOM contents of the embed has changed and caused the height of th
 
 Fired when a change to the employer settings has been committed into the partners system. This fires when the webhook delivering the data into the partner has responded with a < 400 status code. Only fires for URLs which load the employer settings embed.
 
-#### Onboarding session complete committed
+#### Onboarding session committed
 
 Fired when a user has completed the onboarding flow and the information has been delivered into the partner system (the same "committed" rules as the employer settings apply here)
+
+#### Onboarding session finished
+
+Fired when a user has finished the onboarding flow but we have not transmitted the payload of data. As some provisioning of member details is asynchronous you will most likely be listening to this event to move the user to the next step of the onboarding.
 
 ## Use with React
 
