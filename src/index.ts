@@ -7,6 +7,10 @@ import {
   Message as EmployerSettingsCommittedMessageV1,
 } from "./services/messages/v1/employer_settings_committed";
 import {
+  Data as EmployerSettingsUpdatedDataV1,
+  Message as EmployerSettingsUpdatedMessageV1,
+} from "./services/messages/v1/employer_settings_updated";
+import {
   Data as OnboardingSessionCommittedDataV1,
   Message as OnboardingSessionCommittedMessageV1,
 } from "./services/messages/v1/onboarding_session_committed";
@@ -26,6 +30,7 @@ import {
 
 export { MESSAGE_KIND };
 export { EmployerSettingsCommittedDataV1, EmployerSettingsCommittedMessageV1 };
+export { EmployerSettingsUpdatedDataV1, EmployerSettingsUpdatedMessageV1 };
 export {
   OnboardingSessionCommittedDataV1,
   OnboardingSessionCommittedMessageV1,
@@ -36,6 +41,7 @@ export { WindowDimensionChangeMessageDataV1, WindowDimensionChangeMessageV1 };
 
 export type AvailableMessages =
   | EmployerSettingsCommittedMessageV1
+  | EmployerSettingsUpdatedMessageV1
   | OnboardingSessionCommittedMessageV1
   | OnboardingSessionFinishedMessageV1
   | ToastMessageV1
@@ -43,6 +49,7 @@ export type AvailableMessages =
 
 export type MessageKindToTypeMap = {
   [MESSAGE_KIND.EMPLOYER_SETTINGS_COMMITTED]: EmployerSettingsCommittedMessageV1;
+  [MESSAGE_KIND.EMPLOYER_SETTINGS_UPDATED]: EmployerSettingsUpdatedMessageV1;
   [MESSAGE_KIND.ONBOARDING_SESSION_COMMITTED]: OnboardingSessionCommittedMessageV1;
   [MESSAGE_KIND.ONBOARDING_SESSION_FINISHED]: OnboardingSessionFinishedMessageV1;
   [MESSAGE_KIND.TOAST]: ToastMessageV1;
@@ -162,6 +169,11 @@ export class Embed {
     // incoming message before we hand it over)
     switch (event.data.kind) {
       case MESSAGE_KIND.EMPLOYER_SETTINGS_COMMITTED: {
+        this.bus.emit(event.data.kind, event.data.data);
+        break;
+      }
+
+      case MESSAGE_KIND.EMPLOYER_SETTINGS_UPDATED: {
         this.bus.emit(event.data.kind, event.data.data);
         break;
       }
