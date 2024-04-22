@@ -173,6 +173,29 @@ describe("Embed", () => {
       });
     });
 
+    describe("employer settings updated", () => {
+      it("calls externally bound listener", () => {
+        const listener = jest.fn();
+
+        const data = {
+          kind: MESSAGE_KIND.EMPLOYER_SETTINGS_UPDATED,
+          data: {},
+        };
+
+        embed.on(MESSAGE_KIND.EMPLOYER_SETTINGS_UPDATED, listener);
+
+        fireEvent(
+          window,
+          new MessageEvent("message", {
+            data,
+            origin: "https://api.superapi.com.au",
+          }),
+        );
+
+        expect(listener).toHaveBeenCalledWith(data.data);
+      });
+    });
+
     describe("onboarding session complete committed", () => {
       it("calls externally bound listener", () => {
         const listener = jest.fn();
