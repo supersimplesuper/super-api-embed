@@ -72,6 +72,8 @@ embed.on(MESSAGE_KIND.TOAST, (event: ToastMessagePayloadV1) => {
 
 #### Toast message
 
+Subscribe using: `MESSAGE_KIND.TOAST`
+
 Fired when a notification message should be shown to the user, i.e. when they have selected a fund.
 
 The data component of this event contains:
@@ -83,21 +85,37 @@ The data component of this event contains:
 
 #### Window dimension change
 
+Subscribe using: `MESSAGE_KIND.WINDOW_DIMENSION_CHANGE`
+
 Fired when the DOM contents of the embed has changed and caused the height of the embed to change.
 
 | Name   | Description                                                      |
 | ------ | ---------------------------------------------------------------- |
 | bounds | A `DOMRect` instance which contains the dimensions of the widget |
 
+#### Employer settings updated
+
+Subscribe using: `MESSAGE_KIND.EMPLOYER_SETTINGS_UPDATED`
+
+Fired when an update has been made to the employer settings but the data changes have not been delivered to the partner system. Only fires for URLs which load the employer settings embed.
+
 #### Employer settings committed
+
+Subscribe using: `MESSAGE_KIND.EMPLOYER_SETTINGS_COMMITTED`
 
 Fired when a change to the employer settings has been committed into the partners system. This fires when the webhook delivering the data into the partner has responded with a < 400 status code. Only fires for URLs which load the employer settings embed.
 
+This can be used in combination with the employer settings updated to create a busy state which can show the update to the employer details being in flight.
+
 #### Onboarding session committed
+
+Subscribe using: `MESSAGE_KIND.ONBOARDING_SESSION_COMMITTED`
 
 Fired when a user has completed the onboarding flow and the information has been delivered into the partner system (the same "committed" rules as the employer settings apply here)
 
 #### Onboarding session finished
+
+Subscribe using: `MESSAGE_KIND.ONBOARDING_SESSION_FINISHED`
 
 Fired when a user has finished the onboarding flow but we have not transmitted the payload of data. As some provisioning of member details is asynchronous you will most likely be listening to this event to move the user to the next step of the onboarding.
 
