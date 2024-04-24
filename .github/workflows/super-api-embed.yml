@@ -103,6 +103,8 @@ jobs:
   build-and-release:
     name: 🚀 Build & release
     needs: [lint, audit, format, spell, type, test]
+    permissions:
+      contents: write
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
