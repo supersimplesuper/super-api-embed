@@ -49,7 +49,7 @@
     "@semantic-release/github": "^10.0.3",
     "@semantic-release/npm": "^12.0.0",
     "@semantic-release/release-notes-generator": "^13.0.0",
-    "@testing-library/dom": "^10.0.0",
+    "@testing-library/dom": "^10.1.0",
     "@testing-library/jest-dom": "^6.4.2",
     "@types/jest": "^29.5.12",
     "@types/jsdom": "^21.1.6",
