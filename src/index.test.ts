@@ -246,6 +246,50 @@ describe("Embed", () => {
     });
 
     describe("window dimensions change event", () => {
+      it("logs the event", () => {
+        fireEvent(
+          window,
+          new MessageEvent("message", {
+            data: {
+              kind: MESSAGE_KIND.WINDOW_DIMENSION_CHANGE,
+              data: {
+                bounds: {
+                  height: 200,
+                },
+              },
+            },
+            origin: "https://api.superapi.com.au",
+          }),
+        );
+
+        // eslint-disable-next-line @typescript-eslint/unbound-method
+        expect(loglevel.debug).toHaveBeenCalledWith(
+          "Reacting to dimensions change of iFrame element, setting height to 200",
+        );
+      });
+
+      it("sets the height of the iframe", () => {
+        fireEvent(
+          window,
+          new MessageEvent("message", {
+            data: {
+              kind: MESSAGE_KIND.WINDOW_DIMENSION_CHANGE,
+              data: {
+                bounds: {
+                  height: 200,
+                },
+              },
+            },
+            origin: "https://api.superapi.com.au",
+          }),
+        );
+
+        const scope = within(element);
+        const iframe = scope.getByTestId("iframe");
+        expect(iframe).toHaveAttribute("height", "200px");
+        expect(iframe).toHaveAttribute("width", "100%");
+      });
+
       it("calls externally bound listener", () => {
         const listener = jest.fn();
 

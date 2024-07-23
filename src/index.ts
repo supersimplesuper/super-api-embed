@@ -193,8 +193,17 @@ export class Embed {
         break;
       }
 
+      // When the dimensions of the iFrames height change, we want to modify
+      // the containing element
       case MESSAGE_KIND.WINDOW_DIMENSION_CHANGE: {
+        const height = event.data.data.bounds.height;
+        log.debug(
+          `Reacting to dimensions change of iFrame element, setting height to ${height}`,
+        );
+        this.iframe.height = `${height}px`;
+
         this.bus.emit(event.data.kind, event.data.data);
+
         break;
       }
 
