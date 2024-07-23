@@ -64,6 +64,7 @@ const allowedOrigins = ["https://api.superapi.com.au"];
 export type Options = {
   element: HTMLElement;
   loaderClass?: string;
+  matchContentsHeight?: boolean;
   url: string;
 };
 
@@ -85,7 +86,13 @@ export class Embed {
   bus: EventEmitter;
 
   constructor(options: Options) {
-    this.options = options;
+    // Merge options over the top of the default options
+    this.options = {
+      ...{
+        matchContentsHeight: false,
+      },
+      ...options,
+    };
 
     log.info(`Creating embed wrapper on element with URL: ${this.options.url}`);
 
@@ -193,14 +200,16 @@ export class Embed {
         break;
       }
 
-      // When the dimensions of the iFrames height change, we want to modify
-      // the containing element
       case MESSAGE_KIND.WINDOW_DIMENSION_CHANGE: {
         const height = event.data.data.bounds.height;
+
         log.debug(
           `Reacting to dimensions change of iFrame element, setting height to ${height}`,
         );
-        this.iframe.height = `${height}px`;
+
+        if (this.options.matchContentsHeight === true) {
+          this.iframe.height = `${height}px`;
+        }
 
         this.bus.emit(event.data.kind, event.data.data);
 
