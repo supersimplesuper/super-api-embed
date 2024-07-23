@@ -86,12 +86,13 @@ export class Embed {
   bus: EventEmitter;
 
   constructor(options: Options) {
+
     // Merge options over the top of the default options
     this.options = {
       ...{
         matchContentsHeight: false,
       },
-      ...options,
+      ...options
     };
 
     log.info(`Creating embed wrapper on element with URL: ${this.options.url}`);
@@ -202,11 +203,11 @@ export class Embed {
 
       case MESSAGE_KIND.WINDOW_DIMENSION_CHANGE: {
         const height = event.data.data.bounds.height;
-
+          
         log.debug(
           `Reacting to dimensions change of iFrame element, setting height to ${height}`,
         );
-
+        
         if (this.options.matchContentsHeight === true) {
           this.iframe.height = `${height}px`;
         }
