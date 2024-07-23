@@ -333,30 +333,58 @@ describe("Embed", () => {
       });
     });
 
-    describe("handle messages", () => {
-      describe("window dimensions change event", () => {
-        it("sets the height of the iframe", () => {
-          fireEvent(
-            window,
-            new MessageEvent("message", {
-              data: {
-                kind: MESSAGE_KIND.WINDOW_DIMENSION_CHANGE,
-                data: {
-                  bounds: {
-                    height: 200,
-                  },
-                },
+    it("sets the height of the iframe", () => {
+      fireEvent(
+        window,
+        new MessageEvent("message", {
+          data: {
+            kind: MESSAGE_KIND.WINDOW_DIMENSION_CHANGE,
+            data: {
+              bounds: {
+                height: 200,
               },
-              origin: "https://api.superapi.com.au",
-            }),
-          );
+            },
+          },
+          origin: "https://api.superapi.com.au",
+        }),
+      );
 
-          const scope = within(element);
-          const iframe = scope.getByTestId("iframe");
-          expect(iframe).toHaveAttribute("height", "200px");
-          expect(iframe).toHaveAttribute("width", "100%");
-        });
+      const scope = within(element);
+      const iframe = scope.getByTestId("iframe");
+      expect(iframe).toHaveAttribute("height", "200px");
+      expect(iframe).toHaveAttribute("width", "100%");
+    });
+  });
+
+  describe("can provide additional origins", () => {
+    beforeEach(() => {
+      jest.clearAllMocks();
+
+      element = window.document.createElement("div");
+
+      embed = new Embed({
+        element,
+        extraAllowedOrigins: ["https://www.anotherorigin.com"],
+        loaderClass: "theClass",
+        url: "https://www.example.com/",
       });
+    });
+
+    it("logs incoming messages", () => {
+      fireEvent(
+        window,
+        new MessageEvent("message", {
+          data: {
+            hello: "world",
+          },
+          origin: "https://www.anotherorigin.com",
+        }),
+      );
+
+      // eslint-disable-next-line @typescript-eslint/unbound-method
+      expect(loglevel.info).toHaveBeenCalledWith(
+        "Heard incoming message: undefined, with data: undefined",
+      );
     });
   });
 });
