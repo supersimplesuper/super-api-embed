@@ -63,6 +63,7 @@ const allowedOrigins = ["https://api.superapi.com.au"];
 // configure it.
 export type Options = {
   element: HTMLElement;
+  extraAllowedOrigins?: Array<string>,
   loaderClass?: string;
   matchContentsHeight?: boolean;
   url: string;
