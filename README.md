@@ -35,12 +35,13 @@ const embed = new Embed({
 
 The `Embed` class can be invoked with the following parameters:
 
-| Name                | Description                                                                                                                                | Required | Default |
-| ------------------- | ------------------------------------------------------------------------------------------------------------------------------------------ | -------- | ------- |
-| element             | The DOM node you want to place the embed into. Any content in this node will be removed                                                    | Yes      |         |
-| loaderClass         | An optional class that can be added to the loader element which is shown when the embed is initializing. Use this to customise the loader. | No       |         |
-| matchContentsHeight | Should the iframe resize its height to match the contents of what is inside it?                                                            | No       | False   |
-| url                 | The SuperAPI URL that has been signed, this will then be loaded                                                                            | Yes      |         |
+| Name                | Description                                                                                                                                   | Required | Default | Example                              |
+| ------------------- | --------------------------------------------------------------------------------------------------------------------------------------------- | -------- | ------- | ------------------------------------ |
+| element             | The DOM node you want to place the embed into. Any content in this node will be removed                                                       | Yes      |         | `document.getElementById("myEmbed")` |
+| extraAllowedOrigins | By default the embed will only accept messages from origin https://api.superapi.com.au - if required, you can pass extra allowed origins here | Yes      |         | `['https://www.example.com']`        |
+| loaderClass         | An optional class that can be added to the loader element which is shown when the embed is initializing. Use this to customise the loader.    | No       |         | `.myLoader`                          |
+| matchContentsHeight | Should the iframe resize its height to match the contents of what is inside it?                                                               | No       | False   | `true`                               |
+| url                 | The SuperAPI URL that has been signed, this will then be loaded                                                                               | Yes      |         | `https://example.com`                |
 
 Once the loader has been setup you can then interact with returned instance of the embed.
 

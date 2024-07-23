@@ -57,13 +57,13 @@ export type MessageKindToTypeMap = {
 };
 
 // What origins are we allowed to receive messages from
-const allowedOrigins = ["https://api.superapi.com.au"];
+const defaultAllowedOrigins = ["https://api.superapi.com.au"];
 
 // Controls the kind of options that we're allowed to pass into the embed to
 // configure it.
 export type Options = {
   element: HTMLElement;
-  extraAllowedOrigins?: Array<string>,
+  extraAllowedOrigins?: Array<string>;
   loaderClass?: string;
   matchContentsHeight?: boolean;
   url: string;
@@ -86,17 +86,24 @@ export class Embed {
   // Holds the subscriber system for events related to the iFrame
   bus: EventEmitter;
 
-  constructor(options: Options) {
+  // What origins will we listen to messages from?
+  allowedOrigins: Array<string>;
 
+  constructor(options: Options) {
     // Merge options over the top of the default options
     this.options = {
       ...{
         matchContentsHeight: false,
       },
-      ...options
+      ...options,
     };
 
     log.info(`Creating embed wrapper on element with URL: ${this.options.url}`);
+
+    // Setup the allowed origins that we listen to messages from
+    this.allowedOrigins = defaultAllowedOrigins.concat(
+      this.options.extraAllowedOrigins ? this.options.extraAllowedOrigins : [],
+    );
 
     // Setup the event bus so others may subscribe the events
     this.bus = new EventEmitter();
@@ -162,7 +169,7 @@ export class Embed {
   }
 
   private handleMessage(event: MessageEvent<AvailableMessages>) {
-    if (allowedOrigins.includes(event.origin) !== true) {
+    if (this.allowedOrigins.includes(event.origin) !== true) {
       log.warn(
         `Message heard from unknown origin and will be ignored, was: ${event.origin}`,
       );
@@ -204,11 +211,11 @@ export class Embed {
 
       case MESSAGE_KIND.WINDOW_DIMENSION_CHANGE: {
         const height = event.data.data.bounds.height;
-          
+
         log.debug(
           `Reacting to dimensions change of iFrame element, setting height to ${height}`,
         );
-        
+
         if (this.options.matchContentsHeight === true) {
           this.iframe.height = `${height}px`;
         }
