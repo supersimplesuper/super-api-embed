@@ -65,7 +65,6 @@ export type Options = {
   element: HTMLElement;
   extraAllowedOrigins?: Array<string>;
   loaderClass?: string;
-  matchContentsHeight?: boolean;
   url: string;
 };
 
@@ -90,13 +89,7 @@ export class Embed {
   allowedOrigins: Array<string>;
 
   constructor(options: Options) {
-    // Merge options over the top of the default options
-    this.options = {
-      ...{
-        matchContentsHeight: false,
-      },
-      ...options,
-    };
+    this.options = options;
 
     log.info(`Creating embed wrapper on element with URL: ${this.options.url}`);
 
@@ -216,9 +209,7 @@ export class Embed {
           `Reacting to dimensions change of iFrame element, setting height to ${height}`,
         );
 
-        if (this.options.matchContentsHeight === true) {
-          this.iframe.height = `${height}px`;
-        }
+        this.iframe.height = `${height}px`;
 
         this.bus.emit(event.data.kind, event.data.data);
 
