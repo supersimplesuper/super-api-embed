@@ -40,18 +40,13 @@ The `Embed` class can be invoked with the following parameters:
 | element             | The DOM node you want to place the embed into. Any content in this node will be removed                                                       | Yes      |         | `document.getElementById("myEmbed")` |
 | extraAllowedOrigins | By default the embed will only accept messages from origin https://api.superapi.com.au - if required, you can pass extra allowed origins here | Yes      |         | `['https://www.example.com']`        |
 | loaderClass         | An optional class that can be added to the loader element which is shown when the embed is initializing. Use this to customise the loader.    | No       |         | `.myLoader`                          |
-| matchContentsHeight | Should the iframe resize its height to match the contents of what is inside it?                                                               | No       | False   | `true`                               |
 | url                 | The SuperAPI URL that has been signed, this will then be loaded                                                                               | Yes      |         | `https://example.com`                |
 
 Once the loader has been setup you can then interact with returned instance of the embed.
 
 #### Embed height
 
-One thing to think about when using the embed with your system is where the responsibility of the height of the embed lies. We have two options here:
-
-1. The first option is that you control the height of the embed and it adapts. This is our preferred setup and if offers the most flexibility with the least amount of effort. Simply set the height of the embed to either a fixed or fluid height and we will take care of the rest.
-
-2. Your second option is to let us drive the height of the embed. To do this, turn on the `matchContentsHeight` option. This will instruct the embed to automatically resize the iFrame to match the contents. With this setting on, be sure to place the embed in a container with an overflow on it so that the user can scroll to see content that might be off the bottom of the page.
+The embed will automatically expand the iFrame to match the contents of what it is showing. If your layout has a fixed height, please place the iFrame in a container element with a style of `overflow-y: auto` to avoid the embed breaking your page layout.
 
 ### Events
 
