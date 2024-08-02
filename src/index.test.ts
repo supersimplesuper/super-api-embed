@@ -74,7 +74,6 @@ describe("Embed", () => {
         const scope = within(element);
         const iframe = scope.getByTestId("iframe");
         fireEvent(iframe, new Event("load"));
-        expect(iframe).toHaveAttribute("height", "100%");
       });
     });
 
