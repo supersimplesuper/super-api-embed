@@ -115,7 +115,6 @@ export class Embed {
     this.iframe.setAttribute("data-testid", "iframe");
     this.iframe.addEventListener("load", () => {
       this.loader.remove();
-      this.iframe.height = "100%";
     });
 
     // Setup the loader element, this is displayed before the iFrame is ready
