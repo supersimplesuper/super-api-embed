@@ -35,18 +35,23 @@ const embed = new Embed({
 
 The `Embed` class can be invoked with the following parameters:
 
-| Name                | Description                                                                                                                                   | Required | Default | Example                              |
-| ------------------- | --------------------------------------------------------------------------------------------------------------------------------------------- | -------- | ------- | ------------------------------------ |
-| element             | The DOM node you want to place the embed into. Any content in this node will be removed                                                       | Yes      |         | `document.getElementById("myEmbed")` |
-| extraAllowedOrigins | By default the embed will only accept messages from origin https://api.superapi.com.au - if required, you can pass extra allowed origins here | Yes      |         | `['https://www.example.com']`        |
-| loaderClass         | An optional class that can be added to the loader element which is shown when the embed is initializing. Use this to customise the loader.    | No       |         | `.myLoader`                          |
-| url                 | The SuperAPI URL that has been signed, this will then be loaded                                                                               | Yes      |         | `https://example.com`                |
+| Name                | Description                                                                                                                                   | Required | Example                              |
+| ------------------- | --------------------------------------------------------------------------------------------------------------------------------------------- | -------- | ------------------------------------ |
+| element             | The DOM node you want to place the embed into. Any content in this node will be removed                                                       | Yes      | `document.getElementById("myEmbed")` |
+| extraAllowedOrigins | By default the embed will only accept messages from origin https://api.superapi.com.au - if required, you can pass extra allowed origins here | Yes      | `['https://www.example.com']`        |
+| loaderClass         | An optional class that can be added to the loader element which is shown when the embed is initializing. Use this to customise the loader.    | No       | `.myLoader`                          |
+| url                 | The SuperAPI URL that has been signed, this will then be loaded                                                                               | Yes      | `https://example.com`                |
 
 Once the loader has been setup you can then interact with returned instance of the embed.
 
 #### Embed height
 
 The embed will automatically expand the iFrame to match the contents of what it is showing. If your layout has a fixed height, please place the iFrame in a container element with a style of `overflow-y: auto` to avoid the embed breaking your page layout.
+
+#### Customising the loader
+
+You can choose to use our loader element (and optionally target it by passing the `loaderClass` configuration option) or if you want to have complete control, pass a custom `loaderClass` set to `display: none` and use the load event to hide your own loading indicator when the embed has
+finished loading.
 
 ### Events
 
@@ -98,11 +103,21 @@ Fired when the DOM contents of the embed has changed and caused the height of th
 | ------ | ---------------------------------------------------------------- |
 | bounds | A `DOMRect` instance which contains the dimensions of the widget |
 
+#### Loaded
+
+Subscribe using: `MESSAGE_KIND.LOADED`
+
+Fired when the embed has finished loading.
+
+No data is passed with this event.
+
 #### Employer settings updated
 
 Subscribe using: `MESSAGE_KIND.EMPLOYER_SETTINGS_UPDATED`
 
 Fired when an update has been made to the employer settings but the data changes have not been delivered to the partner system. Only fires for URLs which load the employer settings embed.
+
+No data is passed with this event.
 
 #### Employer settings committed
 
@@ -112,17 +127,23 @@ Fired when a change to the employer settings has been committed into the partner
 
 This can be used in combination with the employer settings updated to create a busy state which can show the update to the employer details being in flight.
 
+No data is passed with this event.
+
 #### Onboarding session committed
 
 Subscribe using: `MESSAGE_KIND.ONBOARDING_SESSION_COMMITTED`
 
 Fired when a user has completed the onboarding flow and the information has been delivered into the partner system (the same "committed" rules as the employer settings apply here)
 
+No data is passed with this event.
+
 #### Onboarding session finished
 
 Subscribe using: `MESSAGE_KIND.ONBOARDING_SESSION_FINISHED`
 
 Fired when a user has finished the onboarding flow but we have not transmitted the payload of data. As some provisioning of member details is asynchronous you will most likely be listening to this event to move the user to the next step of the onboarding.
+
+No data is passed with this event.
 
 ## Use with React
 
