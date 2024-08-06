@@ -62,18 +62,24 @@ describe("Embed", () => {
         expect(iframe).toHaveAttribute("width", "100%");
       });
 
-      it("when the iframe has loaded, it removes the loader element", () => {
+      it("removes the loader element when the load event fires", () => {
         const scope = within(element);
-        const iframe = scope.getByTestId("iframe");
         const loader = scope.getByTestId("loader");
-        fireEvent(iframe, new Event("load"));
-        expect(element).not.toContainElement(loader);
-      });
 
-      it("when the iframe has loaded, it removes the loader element", () => {
-        const scope = within(element);
-        const iframe = scope.getByTestId("iframe");
-        fireEvent(iframe, new Event("load"));
+        const data = {
+          kind: MESSAGE_KIND.LOADED,
+          data: null,
+        };
+
+        fireEvent(
+          window,
+          new MessageEvent("message", {
+            data,
+            origin: "https://api.superapi.com.au",
+          }),
+        );
+
+        expect(element).not.toContainElement(loader);
       });
     });
 

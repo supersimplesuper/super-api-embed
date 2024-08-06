@@ -80,7 +80,7 @@ export class Embed {
   iframe: HTMLIFrameElement;
 
   // Shown before the iFrame has been loaded
-  loader: HTMLDivElement;
+  loader: HTMLDivElement | null;
 
   // Message listener for messages emitted via the iFrame using the
   // `postMessage` functionality
@@ -120,9 +120,6 @@ export class Embed {
     this.iframe.width = "100%";
     this.iframe.height = "0";
     this.iframe.setAttribute("data-testid", "iframe");
-    this.iframe.addEventListener("load", () => {
-      this.loader.remove();
-    });
 
     // Setup the loader element, this is displayed before the iFrame is ready
     this.loader = window.document.createElement("div");
@@ -195,6 +192,12 @@ export class Embed {
 
       case MESSAGE_KIND.LOADED: {
         this.bus.emit(event.data.kind, event.data.data);
+
+        if (this.loader !== null) {
+          this.loader.remove();
+          this.loader = null;
+        }
+
         break;
       }
 
