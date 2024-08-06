@@ -156,7 +156,7 @@ describe("Embed", () => {
 
           const data = {
             kind: MESSAGE_KIND.EMPLOYER_SETTINGS_COMMITTED,
-            data: {},
+            data: null,
           };
 
           embed.on(MESSAGE_KIND.EMPLOYER_SETTINGS_COMMITTED, listener);
@@ -179,10 +179,33 @@ describe("Embed", () => {
 
           const data = {
             kind: MESSAGE_KIND.EMPLOYER_SETTINGS_UPDATED,
-            data: {},
+            data: null,
           };
 
           embed.on(MESSAGE_KIND.EMPLOYER_SETTINGS_UPDATED, listener);
+
+          fireEvent(
+            window,
+            new MessageEvent("message", {
+              data,
+              origin: "https://api.superapi.com.au",
+            }),
+          );
+
+          expect(listener).toHaveBeenCalledWith(data.data);
+        });
+      });
+
+      describe("loaded", () => {
+        it("calls externally bound listener", () => {
+          const listener = jest.fn();
+
+          const data = {
+            kind: MESSAGE_KIND.LOADED,
+            data: null,
+          };
+
+          embed.on(MESSAGE_KIND.LOADED, listener);
 
           fireEvent(
             window,
@@ -202,7 +225,7 @@ describe("Embed", () => {
 
           const data = {
             kind: MESSAGE_KIND.ONBOARDING_SESSION_COMMITTED,
-            data: {},
+            data: null,
           };
 
           embed.on(MESSAGE_KIND.ONBOARDING_SESSION_COMMITTED, listener);
