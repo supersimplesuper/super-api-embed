@@ -83,6 +83,6 @@
   },
   "dependencies": {
     "eventemitter3": "^5.0.1",
-    "loglevel": "^1.9.1"
+    "loglevel": "^1.9.2"
   }
 }
