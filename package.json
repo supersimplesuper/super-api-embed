@@ -58,7 +58,7 @@
     "@typescript-eslint/eslint-plugin": "^7.18.0",
     "@typescript-eslint/parser": "^7.18.0",
     "c8": "^10.1.2",
-    "cspell": "^8.14.4",
+    "cspell": "^8.15.2",
     "esbuild": "^0.24.0",
     "eslint": "^8.57.1",
     "eslint-config-prettier": "^9.1.0",
