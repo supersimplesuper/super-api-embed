@@ -83,6 +83,7 @@
   },
   "dependencies": {
     "eventemitter3": "^5.0.1",
-    "loglevel": "^1.9.2"
+    "loglevel": "^1.9.2",
+    "ts-node": "^10.9.2"
   }
 }
