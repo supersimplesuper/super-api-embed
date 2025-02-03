@@ -38,7 +38,7 @@ The `Embed` class can be invoked with the following parameters:
 | Name                | Description                                                                                                                                   | Required | Example                              |
 | ------------------- | --------------------------------------------------------------------------------------------------------------------------------------------- | -------- | ------------------------------------ |
 | element             | The DOM node you want to place the embed into. Any content in this node will be removed                                                       | Yes      | `document.getElementById("myEmbed")` |
-| extraAllowedOrigins | By default the embed will only accept messages from origin https://api.superapi.com.au - if required, you can pass extra allowed origins here | Yes      | `['https://www.example.com']`        |
+| extraAllowedOrigins | By default the embed will only accept messages from origin https://api.superapi.com.au - if required, you can pass extra allowed origins here | No       | `['https://www.example.com']`        |
 | loaderClass         | An optional class that can be added to the loader element which is shown when the embed is initializing. Use this to customise the loader.    | No       | `.myLoader`                          |
 | url                 | The SuperAPI URL that has been signed, this will then be loaded                                                                               | Yes      | `https://example.com`                |
 
