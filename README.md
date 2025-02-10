@@ -145,6 +145,26 @@ Fired when a user has finished the onboarding flow but we have not transmitted t
 
 No data is passed with this event.
 
+#### Onboarding step changed
+
+Subscribe using: `MESSAGE_KIND.ONBOARDING_STEP_CHANGED`
+
+Fired when the following events occur:
+
+1. The embed has loaded. `current_step` will be the step that the user is currently on.
+2. The user has moved to the next step in the onboarding flow. In this case, `current_step` will reflect this next step.
+
+The data component of this event contains:
+
+| Name          | Description                                   |
+| ------------- | --------------------------------------------- |
+| `current_step`| The current step of the onboarding flow       |
+| `steps`       | All steps associated with the onboarding flow |
+
+This event should be listened to when you want to update your UI to reflect the current step that the user is on.
+
+> Please do not use this event to update your systems (i.e. make API requests as a side-effect from this event). Utilise our webhooks instead.
+
 ## Use with React
 
 While the SuperAPI JS library is not specifically designed to be used with React it is easy to integrate with some use of `useEffect` and a `ref` on a dom node.
