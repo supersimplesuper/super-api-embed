@@ -156,10 +156,10 @@ Fired when the following events occur:
 
 The data component of this event contains:
 
-| Name          | Description                                   |
-| ------------- | --------------------------------------------- |
-| `current_step`| The current step of the onboarding flow       |
-| `steps`       | All steps associated with the onboarding flow |
+| Name           | Description                                   |
+| -------------- | --------------------------------------------- |
+| `current_step` | The current step of the onboarding flow       |
+| `steps`        | All steps associated with the onboarding flow |
 
 This event should be listened to when you want to update your UI to reflect the current step that the user is on.
 
