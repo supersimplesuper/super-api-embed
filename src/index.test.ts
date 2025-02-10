@@ -287,7 +287,6 @@ describe("Embed", () => {
                 "collect_employee_identity",
                 "collect_employee_contact_details",
                 "collect_employee_emergency_contact",
-                "collect_tfnd",
                 "collect_bank_accounts",
                 "collect_super_disclaimer",
                 "collect_super_details",
