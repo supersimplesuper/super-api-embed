@@ -23,6 +23,10 @@ import {
   Message as OnboardingSessionFinishedMessageV1,
 } from "./services/messages/v1/onboarding_session_finished";
 import {
+  Data as OnboardingStepChangedDataV1,
+  Message as OnboardingStepChangedMessageV1,
+} from "./services/messages/v1/onboarding_step_changed";
+import {
   Data as ToastMessageDataV1,
   Kind as ToastKindV1,
   Message as ToastMessageV1,
@@ -40,6 +44,7 @@ export {
   OnboardingSessionCommittedMessageV1,
 };
 export { OnboardingSessionFinishedDataV1, OnboardingSessionFinishedMessageV1 };
+export { OnboardingStepChangedDataV1, OnboardingStepChangedMessageV1 };
 export { ToastKindV1, ToastMessageDataV1, ToastMessageV1 };
 export { LoadedMessageDataV1, LoadedMessageV1 };
 export { WindowDimensionChangeMessageDataV1, WindowDimensionChangeMessageV1 };
@@ -50,6 +55,7 @@ export type AvailableMessages =
   | LoadedMessageV1
   | OnboardingSessionCommittedMessageV1
   | OnboardingSessionFinishedMessageV1
+  | OnboardingStepChangedMessageV1
   | ToastMessageV1
   | WindowDimensionChangeMessageV1;
 
@@ -59,6 +65,7 @@ export type MessageKindToTypeMap = {
   [MESSAGE_KIND.LOADED]: LoadedMessageV1;
   [MESSAGE_KIND.ONBOARDING_SESSION_COMMITTED]: OnboardingSessionCommittedMessageV1;
   [MESSAGE_KIND.ONBOARDING_SESSION_FINISHED]: OnboardingSessionFinishedMessageV1;
+  [MESSAGE_KIND.ONBOARDING_STEP_CHANGED]: OnboardingStepChangedMessageV1;
   [MESSAGE_KIND.TOAST]: ToastMessageV1;
   [MESSAGE_KIND.WINDOW_DIMENSION_CHANGE]: WindowDimensionChangeMessageV1;
 };
@@ -207,6 +214,11 @@ export class Embed {
       }
 
       case MESSAGE_KIND.ONBOARDING_SESSION_FINISHED: {
+        this.bus.emit(event.data.kind, event.data.data);
+        break;
+      }
+
+      case MESSAGE_KIND.ONBOARDING_STEP_CHANGED: {
         this.bus.emit(event.data.kind, event.data.data);
         break;
       }

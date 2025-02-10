@@ -274,6 +274,40 @@ describe("Embed", () => {
         });
       });
 
+      describe("onboarding step changes", () => {
+        it("calls externally bound listener", () => {
+          const listener = jest.fn();
+
+          const data = {
+            kind: MESSAGE_KIND.ONBOARDING_STEP_CHANGED,
+            data: {
+              current_step: "collect_super_details",
+              steps: [
+                "verify_phone_number",
+                "collect_employee_identity",
+                "collect_employee_contact_details",
+                "collect_employee_emergency_contact",
+                "collect_bank_accounts",
+                "collect_super_disclaimer",
+                "collect_super_details",
+              ],
+            },
+          };
+
+          embed.on(MESSAGE_KIND.ONBOARDING_STEP_CHANGED, listener);
+
+          fireEvent(
+            window,
+            new MessageEvent("message", {
+              data,
+              origin: "https://api.superapi.com.au",
+            }),
+          );
+
+          expect(listener).toHaveBeenCalledWith(data.data);
+        });
+      });
+
       describe("window dimensions change event", () => {
         it("logs the event", () => {
           fireEvent(
