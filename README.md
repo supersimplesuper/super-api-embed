@@ -225,6 +225,35 @@ React.useEffect(() => {
 }, [embed, onSelection, embedUrl]);
 ```
 
+## Use without a JavaScript compiler
+
+It's also possible to use this library without the use of a bundler or compiler:
+
+```html
+<!DOCTYPE html>
+<head>
+    <title>SuperAPI Library</title>
+</head>
+<body>
+    <h1>Working</h1>
+    <div id="embed"></div>
+    <script type="module">
+        import { Embed, MESSAGE_KIND } from 'https://cdn.jsdelivr.net/npm/@super-api/super-api-embed@4.2.0/+esm';
+        document.addEventListener('DOMContentLoaded', () => {
+            const target = document.querySelector("#embed");
+            const embedInstance = new Embed({
+              element: target,
+              url: 'http://www.example.com/'
+            })
+
+            console.log('Embed instance created:)
+            console.log(embedInstance);
+        })
+    </script>
+</body>
+</html>
+```
+
 ## Contributing
 
 ### ASDF
