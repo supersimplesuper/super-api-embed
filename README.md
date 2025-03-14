@@ -231,26 +231,27 @@ It's also possible to use this library without the use of a bundler or compiler:
 
 ```html
 <!DOCTYPE html>
-<head>
+<html>
+  <head>
     <title>SuperAPI Library</title>
-</head>
-<body>
+  </head>
+  <body>
     <h1>Working</h1>
     <div id="embed"></div>
     <script type="module">
-        import { Embed, MESSAGE_KIND } from 'https://cdn.jsdelivr.net/npm/@super-api/super-api-embed@4.3.0/+esm';
-        document.addEventListener('DOMContentLoaded', () => {
-            const target = document.querySelector("#embed");
-            const embedInstance = new Embed({
-              element: target,
-              url: 'http://www.example.com/'
-            })
+      import { Embed, MESSAGE_KIND } from 'https://cdn.jsdelivr.net/npm/@super-api/super-api-embed@4.3.0/+esm';
+      document.addEventListener('DOMContentLoaded', () => {
+          const target = document.querySelector("#embed");
+          const embedInstance = new Embed({
+            element: target,
+            url: 'http://www.example.com/'
+          })
 
-            console.log('Embed instance created:)
-            console.log(embedInstance);
-        })
+          console.log('Embed instance created:)
+          console.log(embedInstance);
+      })
     </script>
-</body>
+  </body>
 </html>
 ```
 
