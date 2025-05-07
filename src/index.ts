@@ -127,6 +127,7 @@ export class Embed {
     this.iframe.width = "100%";
     this.iframe.height = "0";
     this.iframe.setAttribute("data-testid", "iframe");
+    this.iframe.allow = "fullscreen";
 
     // Setup the loader element, this is displayed before the iFrame is ready
     this.loader = window.document.createElement("div");
