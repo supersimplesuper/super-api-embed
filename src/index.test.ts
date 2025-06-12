@@ -317,19 +317,22 @@ describe("Embed", () => {
             data: {
               verified_at: "2025-06-11T04:56:46.372459Z",
               remote_id: null,
-            }
-          }
+            },
+          };
 
           embed.on(MESSAGE_KIND.MFA_VERIFICATION_COMPLETED, listener);
 
-          fireEvent(window, new MessageEvent("message", {
-            data,
-            origin: "https://api.superapi.com.au"
-          }));
+          fireEvent(
+            window,
+            new MessageEvent("message", {
+              data,
+              origin: "https://api.superapi.com.au",
+            }),
+          );
 
           expect(listener).toHaveBeenCalledWith(data.data);
-        })
-      })
+        });
+      });
 
       describe("window dimensions change event", () => {
         it("logs the event", () => {

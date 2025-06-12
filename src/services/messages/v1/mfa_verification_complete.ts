@@ -1,12 +1,12 @@
-import { MESSAGE_KIND } from "../../messages"
+import { MESSAGE_KIND } from "../../messages";
 
 export type Data = {
-    verified_at: string | null;
-    remote_id: string | null;
+  verified_at: string | null;
+  remote_id: string | null;
 };
 
 export type Message = {
-    data: Data;
-    kind: MESSAGE_KIND.MFA_VERIFICATION_COMPLETED;
-    version: "v1";
+  data: Data;
+  kind: MESSAGE_KIND.MFA_VERIFICATION_COMPLETED;
+  version: "v1";
 };
