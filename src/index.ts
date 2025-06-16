@@ -15,6 +15,10 @@ import {
   Message as LoadedMessageV1,
 } from "./services/messages/v1/loaded";
 import {
+  Data as MfaVerificationCompleteDataV1,
+  Message as MfaVerificationCompleteMessageV1,
+} from "./services/messages/v1/mfa_verification_complete";
+import {
   Data as OnboardingSessionCommittedDataV1,
   Message as OnboardingSessionCommittedMessageV1,
 } from "./services/messages/v1/onboarding_session_committed";
@@ -39,6 +43,7 @@ import {
 export { MESSAGE_KIND };
 export { EmployerSettingsCommittedDataV1, EmployerSettingsCommittedMessageV1 };
 export { EmployerSettingsUpdatedDataV1, EmployerSettingsUpdatedMessageV1 };
+export { MfaVerificationCompleteDataV1, MfaVerificationCompleteMessageV1 };
 export {
   OnboardingSessionCommittedDataV1,
   OnboardingSessionCommittedMessageV1,
@@ -53,6 +58,7 @@ export type AvailableMessages =
   | EmployerSettingsCommittedMessageV1
   | EmployerSettingsUpdatedMessageV1
   | LoadedMessageV1
+  | MfaVerificationCompleteMessageV1
   | OnboardingSessionCommittedMessageV1
   | OnboardingSessionFinishedMessageV1
   | OnboardingStepChangedMessageV1
@@ -63,6 +69,7 @@ export type MessageKindToTypeMap = {
   [MESSAGE_KIND.EMPLOYER_SETTINGS_COMMITTED]: EmployerSettingsCommittedMessageV1;
   [MESSAGE_KIND.EMPLOYER_SETTINGS_UPDATED]: EmployerSettingsUpdatedMessageV1;
   [MESSAGE_KIND.LOADED]: LoadedMessageV1;
+  [MESSAGE_KIND.MFA_VERIFICATION_COMPLETED]: MfaVerificationCompleteMessageV1;
   [MESSAGE_KIND.ONBOARDING_SESSION_COMMITTED]: OnboardingSessionCommittedMessageV1;
   [MESSAGE_KIND.ONBOARDING_SESSION_FINISHED]: OnboardingSessionFinishedMessageV1;
   [MESSAGE_KIND.ONBOARDING_STEP_CHANGED]: OnboardingStepChangedMessageV1;
@@ -206,6 +213,11 @@ export class Embed {
           this.loader = null;
         }
 
+        break;
+      }
+
+      case MESSAGE_KIND.MFA_VERIFICATION_COMPLETED: {
+        this.bus.emit(event.data.kind, event.data.data);
         break;
       }
 
