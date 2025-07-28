@@ -1,0 +1,42 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>SuperAPI Embed Playground</title>
+  </head>
+  <body>
+    <form id="embedSetter">
+      <label>
+        Embed url:
+        <input name="embedUrl" type="text" style="width: 80ch" />
+      </label>
+      <button>Load</button>
+    </form>
+    <div id="embed"></div>
+    <script type="module">
+      import { Embed, MESSAGE_KIND } from "/src/index.ts";
+
+      const element = window.document.getElementById("embed");
+
+      let embed = null;
+
+      document
+        .getElementById("embedSetter")
+        .addEventListener("submit", (event) => {
+          event.preventDefault();
+          const data = new FormData(event.target);
+          const url = data.get("embedUrl");
+
+          if (embed) {
+            console.log("do teardown");
+          }
+
+          embed = new Embed({
+            element,
+            url,
+          });
+        });
+    </script>
+  </body>
+</html>
