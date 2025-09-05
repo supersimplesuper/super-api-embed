@@ -1,6 +1,6 @@
 {
   "name": "@super-api/super-api-embed",
-  "version": "0.0-managed-by-semantic-release",
+  "version": "0.0.0-semantic-release",
   "type": "module",
   "exports": "./build/index.js",
   "types": "./build/index.d.ts",
