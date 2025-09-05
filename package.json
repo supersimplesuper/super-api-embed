@@ -1,6 +1,6 @@
 {
   "name": "@super-api/super-api-embed",
-  "version": "4.2.1",
+  "version": "0.0-managed-by-semantic-release",
   "type": "module",
   "exports": "./build/index.js",
   "types": "./build/index.d.ts",
@@ -9,6 +9,7 @@
     "node": ">= 20",
     "npm": ">= 10"
   },
+  "sideEffects": false,
   "publishConfig": {
     "access": "public"
   },
