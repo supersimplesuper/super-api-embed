@@ -257,16 +257,6 @@ It's also possible to use this library without the use of a bundler or compiler:
 
 ## Contributing
 
-### ASDF
-
-We use ASDF to mange the versions of tools required for development on this library. Install ASDF and the NodeJS plugin then run
-
-```bash
-asdf install
-```
-
-In the root directory to install the correct version of NodeJS.
-
 ### TypeScript
 
 Commands:
