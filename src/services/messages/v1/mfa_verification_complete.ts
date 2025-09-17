@@ -11,7 +11,7 @@ export type Data = {
 /**
  * A message type emitted when the user has either completed their MFA session or
  * have exceeded the maximum number of attempts. Successful attempts will have their
- * `verfied_at` property as an ISO-8601 string, while failed attempts will be `null`.
+ * `verified_at` property as an ISO-8601 string, while failed attempts will be `null`.
  */
 export type Message = {
   data: Data;
