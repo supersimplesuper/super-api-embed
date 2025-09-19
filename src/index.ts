@@ -66,15 +66,15 @@ export type AvailableMessages =
   | WindowDimensionChangeMessageV1;
 
 export type MessageKindToTypeMap = {
-  [MESSAGE_KIND.EMPLOYER_SETTINGS_COMMITTED]: EmployerSettingsCommittedMessageV1;
-  [MESSAGE_KIND.EMPLOYER_SETTINGS_UPDATED]: EmployerSettingsUpdatedMessageV1;
-  [MESSAGE_KIND.LOADED]: LoadedMessageV1;
-  [MESSAGE_KIND.MFA_VERIFICATION_COMPLETED]: MfaVerificationCompleteMessageV1;
-  [MESSAGE_KIND.ONBOARDING_SESSION_COMMITTED]: OnboardingSessionCommittedMessageV1;
-  [MESSAGE_KIND.ONBOARDING_SESSION_FINISHED]: OnboardingSessionFinishedMessageV1;
-  [MESSAGE_KIND.ONBOARDING_STEP_CHANGED]: OnboardingStepChangedMessageV1;
-  [MESSAGE_KIND.TOAST]: ToastMessageV1;
-  [MESSAGE_KIND.WINDOW_DIMENSION_CHANGE]: WindowDimensionChangeMessageV1;
+  [MESSAGE_KIND.EMPLOYER_SETTINGS_COMMITTED]: EmployerSettingsCommittedDataV1;
+  [MESSAGE_KIND.EMPLOYER_SETTINGS_UPDATED]: EmployerSettingsUpdatedDataV1;
+  [MESSAGE_KIND.LOADED]: null;
+  [MESSAGE_KIND.MFA_VERIFICATION_COMPLETED]: MfaVerificationCompleteDataV1;
+  [MESSAGE_KIND.ONBOARDING_SESSION_COMMITTED]: OnboardingSessionCommittedDataV1;
+  [MESSAGE_KIND.ONBOARDING_SESSION_FINISHED]: OnboardingSessionFinishedDataV1;
+  [MESSAGE_KIND.ONBOARDING_STEP_CHANGED]: OnboardingStepChangedDataV1;
+  [MESSAGE_KIND.TOAST]: ToastMessageDataV1;
+  [MESSAGE_KIND.WINDOW_DIMENSION_CHANGE]: WindowDimensionChangeMessageDataV1;
 };
 
 // What origins are we allowed to receive messages from
