@@ -2,40 +2,40 @@ import { EventEmitter } from "eventemitter3";
 import log from "loglevel";
 
 import { MESSAGE_KIND } from "./services/messages";
-import {
+import type {
   Data as EmployerSettingsCommittedDataV1,
   Message as EmployerSettingsCommittedMessageV1,
 } from "./services/messages/v1/employer_settings_committed";
-import {
+import type {
   Data as EmployerSettingsUpdatedDataV1,
   Message as EmployerSettingsUpdatedMessageV1,
 } from "./services/messages/v1/employer_settings_updated";
-import {
+import type {
   Data as LoadedMessageDataV1,
   Message as LoadedMessageV1,
 } from "./services/messages/v1/loaded";
-import {
+import type {
   Data as MfaVerificationCompleteDataV1,
   Message as MfaVerificationCompleteMessageV1,
 } from "./services/messages/v1/mfa_verification_complete";
-import {
+import type {
   Data as OnboardingSessionCommittedDataV1,
   Message as OnboardingSessionCommittedMessageV1,
 } from "./services/messages/v1/onboarding_session_committed";
-import {
+import type {
   Data as OnboardingSessionFinishedDataV1,
   Message as OnboardingSessionFinishedMessageV1,
 } from "./services/messages/v1/onboarding_session_finished";
-import {
+import type {
   Data as OnboardingStepChangedDataV1,
   Message as OnboardingStepChangedMessageV1,
 } from "./services/messages/v1/onboarding_step_changed";
-import {
+import type {
   Data as ToastMessageDataV1,
   Kind as ToastKindV1,
   Message as ToastMessageV1,
 } from "./services/messages/v1/toast";
-import {
+import type {
   Data as WindowDimensionChangeMessageDataV1,
   Message as WindowDimensionChangeMessageV1,
 } from "./services/messages/v1/window_dimension_change";
@@ -86,6 +86,7 @@ export type Options = {
   element: HTMLElement;
   extraAllowedOrigins?: Array<string>;
   loaderClass?: string;
+  onLoadError?: () => void;
   url: string;
 };
 
@@ -109,7 +110,16 @@ export class Embed {
   // What origins will we listen to messages from?
   allowedOrigins: Array<string>;
 
+  // Track the responsiveness timer, if this is fired then we assume a problem
+  // with loading the embed.
+  responsiveTimer: ReturnType<typeof setTimeout> | null;
+
+  // Track if the embed has successfully loaded. Set to true when the
+  embedSuccessfullyInitialized: boolean;
+
   constructor(options: Options) {
+    this.embedSuccessfullyInitialized = false;
+    this.responsiveTimer = null;
     this.options = options;
 
     log.info(`Creating embed wrapper on element with URL: ${this.options.url}`);
@@ -135,6 +145,22 @@ export class Embed {
     this.iframe.height = "0";
     this.iframe.setAttribute("data-testid", "iframe");
     this.iframe.allow = "fullscreen";
+
+    this.iframe.addEventListener("load", () => {
+      this.responsiveTimer = setTimeout(() => {
+        if (
+          this.embedSuccessfullyInitialized === false &&
+          this.options.onLoadError !== undefined
+        ) {
+          log.warn(
+            "Detected embed load failure, `onLoadError` callback will be fired if available",
+          );
+          this.options.onLoadError();
+        } else {
+          log.info("Detected successful embed load");
+        }
+      }, 3000);
+    });
 
     // Setup the loader element, this is displayed before the iFrame is ready
     this.loader = window.document.createElement("div");
@@ -212,6 +238,8 @@ export class Embed {
           this.loader.remove();
           this.loader = null;
         }
+
+        this.embedSuccessfullyInitialized = true;
 
         break;
       }

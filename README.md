@@ -35,12 +35,13 @@ const embed = new Embed({
 
 The `Embed` class can be invoked with the following parameters:
 
-| Name                | Description                                                                                                                                   | Required | Example                              |
-| ------------------- | --------------------------------------------------------------------------------------------------------------------------------------------- | -------- | ------------------------------------ |
-| element             | The DOM node you want to place the embed into. Any content in this node will be removed                                                       | Yes      | `document.getElementById("myEmbed")` |
-| extraAllowedOrigins | By default the embed will only accept messages from origin https://api.superapi.com.au - if required, you can pass extra allowed origins here | No       | `['https://www.example.com']`        |
-| loaderClass         | An optional class that can be added to the loader element which is shown when the embed is initializing. Use this to customise the loader.    | No       | `.myLoader`                          |
-| url                 | The SuperAPI URL that has been signed, this will then be loaded                                                                               | Yes      | `https://example.com`                |
+| Name                | Description                                                                                                                                   | Required | Example                                    |
+| ------------------- | --------------------------------------------------------------------------------------------------------------------------------------------- | -------- | ------------------------------------------ |
+| element             | The DOM node you want to place the embed into. Any content in this node will be removed                                                       | Yes      | `document.getElementById("myEmbed")`       |
+| extraAllowedOrigins | By default the embed will only accept messages from origin https://api.superapi.com.au - if required, you can pass extra allowed origins here | No       | `['https://www.example.com']`              |
+| loaderClass         | An optional class that can be added to the loader element which is shown when the embed is initializing. Use this to customise the loader.    | No       | `.myLoader`                                |
+| onLoadError         | An optional callback that will fire if the embed cannot load SuperAPI due to an error                                                         | No       | `() => { console.log('Error detected!') }` |
+| url                 | The SuperAPI URL that has been signed, this will then be loaded                                                                               | Yes      | `https://example.com`                      |
 
 Once the loader has been setup you can then interact with returned instance of the embed.
 
@@ -52,6 +53,10 @@ The embed will automatically expand the iFrame to match the contents of what it 
 
 You can choose to use our loader element (and optionally target it by passing the `loaderClass` configuration option) or if you want to have complete control, pass a custom `loaderClass` set to `display: none` and use the load event to hide your own loading indicator when the embed has
 finished loading.
+
+#### Handling load errors
+
+In the rare case that the embed fails to load SuperAPI content we provide a callback, `onLoadError`, which will fire shortly after the content fails to load. This will handle scenarios where expired onboarding sessions are loaded, incorrect signing is applied to the embed URL or a network failure means the embed cannot be loaded or initialised.
 
 ### Events
 
