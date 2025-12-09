@@ -438,4 +438,95 @@ describe("Embed", () => {
       );
     });
   });
+
+  describe("load error detection", () => {
+    beforeEach(() => {
+      jest.clearAllMocks();
+      jest.useFakeTimers();
+    });
+
+    afterEach(() => {
+      jest.useRealTimers();
+    });
+
+    it("calls onLoadError when iframe load completes but embed is never initialised", () => {
+      const container = window.document.createElement("div");
+      const onLoadError = jest.fn();
+
+      const localEmbed = new Embed({
+        element: container,
+        loaderClass: "theClass",
+        url: "https://www.example.com/",
+        onLoadError,
+      });
+
+      const scope = within(container);
+      const iframe = scope.getByTestId("iframe");
+
+      // Simulate iframe load
+      fireEvent.load(iframe);
+
+      // Before the timeout fires, the callback must not have been called
+      expect(onLoadError).not.toHaveBeenCalled();
+
+      // Advance timers to trigger the 3 second timeout
+      jest.advanceTimersByTime(3000);
+
+      expect(onLoadError).toHaveBeenCalledTimes(1);
+
+      // eslint-disable-next-line @typescript-eslint/unbound-method
+      expect(loglevel.warn).toHaveBeenCalledWith(
+        "Detected embed load failure, `onLoadError` callback will be fired if available",
+      );
+
+      // Sanity check that we never flagged the embed as successfully initialised
+      expect(localEmbed.embedSuccessfullyInitialized).toBe(false);
+    });
+
+    it("does not call onLoadError when LOADED message is received before timeout", () => {
+      const container = window.document.createElement("div");
+      const onLoadError = jest.fn();
+
+      const localEmbed = new Embed({
+        element: container,
+        loaderClass: "theClass",
+        url: "https://www.example.com/",
+        onLoadError,
+      });
+
+      const scope = within(container);
+      const iframe = scope.getByTestId("iframe");
+
+      // Simulate iframe load
+      fireEvent.load(iframe);
+
+      // Simulate the embed reporting that it has loaded correctly
+      const data = {
+        kind: MESSAGE_KIND.LOADED,
+        data: null,
+      };
+
+      fireEvent(
+        window,
+        new MessageEvent("message", {
+          data,
+          origin: "https://api.superapi.com.au",
+        }),
+      );
+
+      // At this point the flag should be set
+      expect(localEmbed.embedSuccessfullyInitialized).toBe(true);
+
+      // Advance timers past the 3 second window
+      jest.advanceTimersByTime(3000);
+
+      // onLoadError should never be called
+      expect(onLoadError).not.toHaveBeenCalled();
+
+      // eslint-disable-next-line @typescript-eslint/unbound-method
+      expect(loglevel.info).toHaveBeenCalledWith(
+        "Detected successful embed load",
+      );
+    });
+  });
 });
