@@ -76,7 +76,7 @@
     "semantic-release": "^25.0.1",
     "ts-jest": "^29.4.5",
     "typescript": "^5.6.3",
-    "vite": "^7.1.11"
+    "vite": "^7.3.0"
   },
   "lint-staged": {
     "*.ts": "eslint --cache --fix",
