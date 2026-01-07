@@ -83,7 +83,7 @@
     "*.--write": "prettier --write"
   },
   "dependencies": {
-    "eslint-plugin-jest": "^29.5.0",
+    "eslint-plugin-jest": "^29.12.1",
     "eventemitter3": "^5.0.1",
     "loglevel": "^1.9.2",
     "ts-node": "^10.9.2"
