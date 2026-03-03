@@ -2,8 +2,8 @@ name: super-api-embed
 
 on: [push]
 
-env:
-  NPM_TOKEN: ${{ secrets.NPM_TOKEN }}
+permissions:
+  contents: read
 
 jobs:
   dependencies:
@@ -108,6 +108,7 @@ jobs:
     needs: [lint, audit, format, spell, type, test]
     permissions:
       contents: write
+      id-token: write
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
@@ -121,5 +122,4 @@ jobs:
       - name: 🚀 Release
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-          NPM_TOKEN: ${{ secrets.NPM_TOKEN }}
         run: npm run semantic-release
