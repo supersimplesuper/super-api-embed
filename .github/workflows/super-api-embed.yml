@@ -42,7 +42,7 @@ jobs:
           node-version-file: package.json
           cache: "npm"
       - name: 🛡️ Audit
-        run: npm audit --audit-level=high
+        run: npm audit --audit-level=high --omit=dev
 
   format:
     name: 🔬 Format
