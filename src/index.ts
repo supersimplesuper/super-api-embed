@@ -48,6 +48,7 @@ export { MESSAGE_KIND };
 export { EmployerSettingsCommittedDataV1, EmployerSettingsCommittedMessageV1 };
 export { EmployerSettingsUpdatedDataV1, EmployerSettingsUpdatedMessageV1 };
 export { MfaVerificationCompleteDataV1, MfaVerificationCompleteMessageV1 };
+export { OnboardingIntentCompletedDataV1, OnboardingIntentCompletedMessageV1 };
 export {
   OnboardingSessionCommittedDataV1,
   OnboardingSessionCommittedMessageV1,
