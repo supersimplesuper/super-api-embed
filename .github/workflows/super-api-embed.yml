@@ -2,9 +2,6 @@ name: super-api-embed
 
 on: [push]
 
-env:
-  NPM_TOKEN: ${{ secrets.NPM_TOKEN }}
-
 jobs:
   dependencies:
     name: 📦 Dependencies
@@ -108,6 +105,7 @@ jobs:
     needs: [lint, audit, format, spell, type, test]
     permissions:
       contents: write
+      id-token: write # Enables use of OIDC for trusted publishing and npm provenance
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
@@ -116,10 +114,11 @@ jobs:
           node-version-file: package.json
           cache: "npm"
       - run: npm ci
+      - name: Verify the integrity of provenance attestations and registry signatures for installed dependencies
+        run: npm audit signatures
       - name: 🔨 Build
         run: npm run build
       - name: 🚀 Release
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-          NPM_TOKEN: ${{ secrets.NPM_TOKEN }}
         run: npm run semantic-release
