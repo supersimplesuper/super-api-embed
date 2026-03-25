@@ -274,6 +274,29 @@ describe("Embed", () => {
         });
       });
 
+      describe("onboarding intents", () => {
+        it("calls externally bound listener", () => {
+          const listener = jest.fn();
+
+          const data = {
+            kind: MESSAGE_KIND.ONBOARDING_INTENT_COMPLETED,
+            data: null,
+          };
+
+          embed.on(MESSAGE_KIND.ONBOARDING_INTENT_COMPLETED, listener);
+
+          fireEvent(
+            window,
+            new MessageEvent("message", {
+              data,
+              origin: "https://api.superapi.com.au",
+            }),
+          );
+
+          expect(listener).toHaveBeenCalledWith(data.data);
+        });
+      });
+
       describe("onboarding step changes", () => {
         it("calls externally bound listener", () => {
           const listener = jest.fn();
