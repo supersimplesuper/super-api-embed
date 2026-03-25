@@ -430,6 +430,26 @@ describe("Embed", () => {
     });
   });
 
+  describe("can provide custom loaders", () => {
+    it("creates the custom loader when provided", () => {
+      const spy = jest.fn();
+
+      const element = window.document.createElement("div");
+
+      new Embed({
+        element,
+        loaderClass: "theClass",
+        url: "https://www.example.com/",
+        createLoader: () => {
+          spy();
+          return window.document.createElement("div");
+        },
+      });
+
+      expect(spy).toHaveBeenCalled();
+    });
+  });
+
   describe("can provide additional origins", () => {
     beforeEach(() => {
       jest.clearAllMocks();
