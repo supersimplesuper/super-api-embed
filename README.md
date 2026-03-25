@@ -134,6 +134,16 @@ This can be used in combination with the employer settings updated to create a b
 
 No data is passed with this event.
 
+#### Onboarding intent completed
+
+Subscribe using: `MESSAGE_KIND.ONBOARDING_INTENT_COMPLETED`
+
+Fired when a user has completed their onboarding session intent. Intents allow users to customise certain aspects of an onboarding session which will be shown to their employees.
+
+This can be used to notify the user that their intent is being processed while they are waiting for the webhook to arrive and complete.
+
+No data is passed with this event.
+
 #### Onboarding session committed
 
 Subscribe using: `MESSAGE_KIND.ONBOARDING_SESSION_COMMITTED`
