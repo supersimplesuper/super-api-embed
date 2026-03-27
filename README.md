@@ -42,6 +42,7 @@ The `Embed` class can be invoked with the following parameters:
 | loaderClass         | An optional class that can be added to the loader element which is shown when the embed is initializing. Use this to customise the loader.    | No       | `.myLoader`                                |
 | onLoadError         | An optional callback that will fire if the embed cannot load SuperAPI due to an error                                                         | No       | `() => { console.log('Error detected!') }` |
 | url                 | The SuperAPI URL that has been signed, this will then be loaded                                                                               | Yes      | `https://example.com`                      |
+| createLoader        | A function that creates the element which is shown when loading the iFrame                                                                    | No       | `() => document.createElement("div");`     |
 
 Once the loader has been setup you can then interact with returned instance of the embed.
 

@@ -430,6 +430,28 @@ describe("Embed", () => {
     });
   });
 
+  describe("can provide custom loaders", () => {
+    it("creates the custom loader when provided", () => {
+      const container = window.document.createElement("div");
+
+      new Embed({
+        element: container,
+        loaderClass: "loading-class",
+        url: "https://www.example.com/",
+        createLoader: () => {
+          const loader = window.document.createElement("div");
+          loader.innerHTML = "<span>Custom Loading</span>";
+          return loader;
+        },
+      });
+
+      const loaderEl = container.querySelector(`[data-testid="loader"]`);
+      expect(loaderEl).toBeInstanceOf(HTMLDivElement);
+      expect(loaderEl?.classList.contains("loading-class")).toBe(true);
+      expect(loaderEl?.innerHTML).toContain("Custom Loading");
+    });
+  });
+
   describe("can provide additional origins", () => {
     beforeEach(() => {
       jest.clearAllMocks();

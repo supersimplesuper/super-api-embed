@@ -92,6 +92,7 @@ const defaultAllowedOrigins = ["https://api.superapi.com.au"];
 export type Options = {
   element: HTMLElement;
   extraAllowedOrigins?: Array<string>;
+  createLoader?: () => HTMLDivElement;
   loaderClass?: string;
   onLoadError?: () => void;
   url: string;
@@ -170,9 +171,19 @@ export class Embed {
     });
 
     // Setup the loader element, this is displayed before the iFrame is ready
-    this.loader = window.document.createElement("div");
-    this.loader.setAttribute("data-testid", "loader");
-    this.loader.innerHTML = "Loading...";
+    // Partners can provide a function that creates the loading element, so they
+    // can create their own cards.
+    const loader = options.createLoader
+      ? options.createLoader()
+      : window.document.createElement("div");
+
+    loader.setAttribute("data-testid", "loader");
+
+    if (!options.createLoader) {
+      loader.innerHTML = "Loading...";
+    }
+
+    this.loader = loader;
 
     if (this.options.loaderClass) {
       this.loader.classList.add(this.options.loaderClass);
