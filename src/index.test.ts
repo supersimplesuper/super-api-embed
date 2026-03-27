@@ -432,21 +432,23 @@ describe("Embed", () => {
 
   describe("can provide custom loaders", () => {
     it("creates the custom loader when provided", () => {
-      const spy = jest.fn();
-
-      const element = window.document.createElement("div");
+      const container = window.document.createElement("div");
 
       new Embed({
-        element,
-        loaderClass: "theClass",
+        element: container,
+        loaderClass: "loading-class",
         url: "https://www.example.com/",
         createLoader: () => {
-          spy();
-          return window.document.createElement("div");
+          const loader = window.document.createElement("div");
+          loader.innerHTML = "<span>Custom Loading</span>";
+          return loader;
         },
       });
 
-      expect(spy).toHaveBeenCalled();
+      const loaderEl = container.querySelector(`[data-testid="loader"]`);
+      expect(loaderEl).toBeInstanceOf(HTMLDivElement);
+      expect(loaderEl?.classList.contains("loading-class")).toBe(true);
+      expect(loaderEl?.innerHTML).toContain("Custom Loading");
     });
   });
 
