@@ -62,6 +62,13 @@ describe("Embed", () => {
         expect(iframe).toHaveAttribute("width", "100%");
       });
 
+      it("disables scrolling on the iframe", () => {
+        const scope = within(element);
+        const iframe = scope.getByTestId("iframe");
+        expect(iframe).toHaveAttribute("scrolling", "no");
+        expect(iframe).toHaveStyle({ overflow: "hidden" });
+      });
+
       it("removes the loader element when the load event fires", () => {
         const scope = within(element);
         const loader = scope.getByTestId("loader");

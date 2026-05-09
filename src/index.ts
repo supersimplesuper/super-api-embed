@@ -152,6 +152,8 @@ export class Embed {
     this.iframe.width = "100%";
     this.iframe.height = "0";
     this.iframe.setAttribute("data-testid", "iframe");
+    this.iframe.setAttribute("scrolling", "no");
+    this.iframe.style.overflow = "hidden";
     this.iframe.allow = "fullscreen";
 
     this.iframe.addEventListener("load", () => {
