@@ -7,6 +7,7 @@ export enum MESSAGE_KIND {
   ONBOARDING_SESSION_COMMITTED = "onboardingSessionCommitted",
   ONBOARDING_STEP_CHANGED = "onboardingStepChanged",
   ONBOARDING_SESSION_FINISHED = "onboardingSessionFinished",
+  PAGE_LOADED = "pageLoaded",
   TOAST = "toast",
   WINDOW_DIMENSION_CHANGE = "windowDimensionChange",
 }
