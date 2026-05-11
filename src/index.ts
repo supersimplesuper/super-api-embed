@@ -35,6 +35,10 @@ import type {
   Message as OnboardingStepChangedMessageV1,
 } from "./services/messages/v1/onboarding_step_changed";
 import type {
+  Data as PageLoadedDataV1,
+  Message as PageLoadedMessageV1,
+} from "./services/messages/v1/page_loaded";
+import type {
   Data as ToastMessageDataV1,
   Kind as ToastKindV1,
   Message as ToastMessageV1,
@@ -55,6 +59,7 @@ export {
 };
 export { OnboardingSessionFinishedDataV1, OnboardingSessionFinishedMessageV1 };
 export { OnboardingStepChangedDataV1, OnboardingStepChangedMessageV1 };
+export { PageLoadedDataV1, PageLoadedMessageV1 };
 export { ToastKindV1, ToastMessageDataV1, ToastMessageV1 };
 export { LoadedMessageDataV1, LoadedMessageV1 };
 export { WindowDimensionChangeMessageDataV1, WindowDimensionChangeMessageV1 };
@@ -68,6 +73,7 @@ export type AvailableMessages =
   | OnboardingSessionCommittedMessageV1
   | OnboardingSessionFinishedMessageV1
   | OnboardingStepChangedMessageV1
+  | PageLoadedMessageV1
   | ToastMessageV1
   | WindowDimensionChangeMessageV1;
 
@@ -80,6 +86,7 @@ export type MessageKindToTypeMap = {
   [MESSAGE_KIND.ONBOARDING_SESSION_COMMITTED]: OnboardingSessionCommittedDataV1;
   [MESSAGE_KIND.ONBOARDING_SESSION_FINISHED]: OnboardingSessionFinishedDataV1;
   [MESSAGE_KIND.ONBOARDING_STEP_CHANGED]: OnboardingStepChangedDataV1;
+  [MESSAGE_KIND.PAGE_LOADED]: PageLoadedDataV1;
   [MESSAGE_KIND.TOAST]: ToastMessageDataV1;
   [MESSAGE_KIND.WINDOW_DIMENSION_CHANGE]: WindowDimensionChangeMessageDataV1;
 };
@@ -289,6 +296,16 @@ export class Embed {
         break;
       }
 
+      case MESSAGE_KIND.PAGE_LOADED: {
+        log.debug("Reacting to page load, scrolling iFrame into view");
+
+        this.iframe.scrollIntoView({ behavior: "instant", block: "start" });
+
+        this.bus.emit(event.data.kind, event.data.data);
+
+        break;
+      }
+
       case MESSAGE_KIND.TOAST: {
         this.bus.emit(event.data.kind, event.data.data);
         break;
@@ -302,9 +319,7 @@ export class Embed {
         );
 
         this.iframe.height = `${height}px`;
-
         this.bus.emit(event.data.kind, event.data.data);
-
         break;
       }
 

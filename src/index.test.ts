@@ -434,6 +434,70 @@ describe("Embed", () => {
           expect(iframe).toHaveAttribute("width", "100%");
         });
       });
+
+      describe("page loaded event", () => {
+        beforeEach(() => {
+          Element.prototype.scrollIntoView = jest.fn();
+        });
+
+        it("logs the event", () => {
+          fireEvent(
+            window,
+            new MessageEvent("message", {
+              data: {
+                kind: MESSAGE_KIND.PAGE_LOADED,
+                data: null,
+              },
+              origin: "https://api.superapi.com.au",
+            }),
+          );
+
+          // eslint-disable-next-line @typescript-eslint/unbound-method
+          expect(loglevel.debug).toHaveBeenCalledWith(
+            "Reacting to page load, scrolling iFrame into view",
+          );
+        });
+
+        it("calls externally bound listener", () => {
+          const listener = jest.fn();
+
+          const data = {
+            kind: MESSAGE_KIND.PAGE_LOADED,
+            data: null,
+          };
+
+          embed.on(MESSAGE_KIND.PAGE_LOADED, listener);
+
+          fireEvent(
+            window,
+            new MessageEvent("message", {
+              data,
+              origin: "https://api.superapi.com.au",
+            }),
+          );
+
+          expect(listener).toHaveBeenCalledWith(data.data);
+        });
+
+        it("scrolls the iframe into view", () => {
+          fireEvent(
+            window,
+            new MessageEvent("message", {
+              data: {
+                kind: MESSAGE_KIND.PAGE_LOADED,
+                data: null,
+              },
+              origin: "https://api.superapi.com.au",
+            }),
+          );
+
+          // eslint-disable-next-line @typescript-eslint/unbound-method
+          expect(Element.prototype.scrollIntoView).toHaveBeenCalledWith({
+            behavior: "instant",
+            block: "start",
+          });
+        });
+      });
     });
   });
 
