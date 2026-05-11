@@ -181,6 +181,16 @@ This event should be listened to when you want to update your UI to reflect the 
 
 > Please do not use this event to update your systems (i.e. make API requests as a side-effect from this event). Utilise our webhooks instead.
 
+#### Page loaded
+
+Subscribe using: `MESSAGE_KIND.PAGE_LOADED`
+
+Fired when a new page is loaded inside the embed. When this event is received the embed will also scroll the iFrame to the top of the viewport so the new page is visible to the user.
+
+No data is passed with this event.
+
+> If your page has a fixed/sticky header that overlaps the embed, set `scroll-padding-top` on the `html` element to your header's height — otherwise the top of the iFrame may end up hidden behind the header after the scroll.
+
 ## Use with React
 
 While the SuperAPI JS library is not specifically designed to be used with React it is easy to integrate with some use of `useEffect` and a `ref` on a dom node.
