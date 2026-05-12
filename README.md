@@ -104,19 +104,19 @@ embed.on(MESSAGE_KIND.TOAST, (data: ToastMessageDataV1) => {
 
 The full list of events is below. Events marked _none_ in the **Data** column are fired without a payload; events with a linked payload have their data shape documented further down.
 
-| Event                         | Constant                                  | Data                                                | When it fires                                                                                                                                                            |
-| ----------------------------- | ----------------------------------------- | --------------------------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------ |
-| Toast message                 | `MESSAGE_KIND.TOAST`                      | [See payload](#toast-payload)                       | A notification should be shown to the user, e.g. when they have selected a fund.                                                                                         |
-| Window dimension change       | `MESSAGE_KIND.WINDOW_DIMENSION_CHANGE`    | [See payload](#window-dimension-change-payload)     | The DOM contents of the embed have changed and caused the height of the embed to change.                                                                                 |
-| Loaded                        | `MESSAGE_KIND.LOADED`                     | _none_                                              | The embed has finished loading.                                                                                                                                          |
-| Employer settings updated¹    | `MESSAGE_KIND.EMPLOYER_SETTINGS_UPDATED`  | _none_                                              | An update has been made to the employer settings but the change has not yet been delivered to the partner system.                                                        |
-| Employer settings committed¹  | `MESSAGE_KIND.EMPLOYER_SETTINGS_COMMITTED`| _none_                                              | A change to the employer settings has been committed into the partner system (the partner webhook responded with a `<400` status code).                                  |
-| Onboarding intent completed   | `MESSAGE_KIND.ONBOARDING_INTENT_COMPLETED`| _none_                                              | A user has completed their onboarding session intent. Useful for showing a "processing" state while waiting for the webhook to complete.                                 |
-| Onboarding session committed  | `MESSAGE_KIND.ONBOARDING_SESSION_COMMITTED`| _none_                                             | A user has completed the onboarding flow and the data has been delivered into the partner system (the same "committed" rules as employer settings apply here).           |
-| Onboarding session finished   | `MESSAGE_KIND.ONBOARDING_SESSION_FINISHED`| _none_                                              | A user has finished the onboarding flow but the payload has not yet been transmitted. Use this to move the user to the next step without waiting on async provisioning.  |
-| Onboarding step changed       | `MESSAGE_KIND.ONBOARDING_STEP_CHANGED`    | [See payload](#onboarding-step-changed-payload)     | The embed has loaded, or the user has moved to the next step in the onboarding flow.                                                                                     |
-| MFA verification completed    | `MESSAGE_KIND.MFA_VERIFICATION_COMPLETED` | [See payload](#mfa-verification-completed-payload)  | The user has finished their MFA session, either by verifying successfully or by exhausting the maximum number of verification attempts.                                  |
-| Page loaded                   | `MESSAGE_KIND.PAGE_LOADED`                | _none_                                              | A new page is loaded inside the embed. The embed will also scroll the iFrame to the top of the viewport so the new page is visible.                                      |
+| Event                        | Constant                                    | Data                                               | When it fires                                                                                                                                                           |
+| ---------------------------- | ------------------------------------------- | -------------------------------------------------- | ----------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| Toast message                | `MESSAGE_KIND.TOAST`                        | [See payload](#toast-payload)                      | A notification should be shown to the user, e.g. when they have selected a fund.                                                                                        |
+| Window dimension change      | `MESSAGE_KIND.WINDOW_DIMENSION_CHANGE`      | [See payload](#window-dimension-change-payload)    | The DOM contents of the embed have changed and caused the height of the embed to change.                                                                                |
+| Loaded                       | `MESSAGE_KIND.LOADED`                       | _none_                                             | The embed has finished loading.                                                                                                                                         |
+| Employer settings updated¹   | `MESSAGE_KIND.EMPLOYER_SETTINGS_UPDATED`    | _none_                                             | An update has been made to the employer settings but the change has not yet been delivered to the partner system.                                                       |
+| Employer settings committed¹ | `MESSAGE_KIND.EMPLOYER_SETTINGS_COMMITTED`  | _none_                                             | A change to the employer settings has been committed into the partner system (the partner webhook responded with a `<400` status code).                                 |
+| Onboarding intent completed  | `MESSAGE_KIND.ONBOARDING_INTENT_COMPLETED`  | _none_                                             | A user has completed their onboarding session intent. Useful for showing a "processing" state while waiting for the webhook to complete.                                |
+| Onboarding session committed | `MESSAGE_KIND.ONBOARDING_SESSION_COMMITTED` | _none_                                             | A user has completed the onboarding flow and the data has been delivered into the partner system (the same "committed" rules as employer settings apply here).          |
+| Onboarding session finished  | `MESSAGE_KIND.ONBOARDING_SESSION_FINISHED`  | _none_                                             | A user has finished the onboarding flow but the payload has not yet been transmitted. Use this to move the user to the next step without waiting on async provisioning. |
+| Onboarding step changed      | `MESSAGE_KIND.ONBOARDING_STEP_CHANGED`      | [See payload](#onboarding-step-changed-payload)    | The embed has loaded, or the user has moved to the next step in the onboarding flow.                                                                                    |
+| MFA verification completed   | `MESSAGE_KIND.MFA_VERIFICATION_COMPLETED`   | [See payload](#mfa-verification-completed-payload) | The user has finished their MFA session, either by verifying successfully or by exhausting the maximum number of verification attempts.                                 |
+| Page loaded                  | `MESSAGE_KIND.PAGE_LOADED`                  | _none_                                             | A new page is loaded inside the embed. The embed will also scroll the iFrame to the top of the viewport so the new page is visible.                                     |
 
 ¹ Only fires for URLs which load the employer settings embed. The updated/committed pair can be used together to drive a busy/in-flight state in your UI.
 
@@ -148,8 +148,8 @@ If a sticky header on your host page is hiding the top of the iFrame after a `PA
 
 #### MFA verification completed payload
 
-| Name          | Description                                                                                                                                  |
-| ------------- | -------------------------------------------------------------------------------------------------------------------------------------------- |
+| Name          | Description                                                                                                                                                                                                                         |
+| ------------- | ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
 | `verified_at` | An ISO 8601 timestamp indicating when the MFA session was verified. Will be `null` when the maximum number of verification attempts has been exceeded, allowing you to distinguish a successful verification from an exhausted one. |
 
 ### Instance methods
@@ -253,17 +253,20 @@ It's also possible to use this library without the use of a bundler or compiler:
     <div id="embed"></div>
     <script type="module">
       // Pin to a specific version for production. Omit the version to always resolve the latest release.
-      import { Embed, MESSAGE_KIND } from 'https://cdn.jsdelivr.net/npm/@super-api/super-api-embed/+esm';
-      document.addEventListener('DOMContentLoaded', () => {
-          const target = document.querySelector("#embed");
-          const embedInstance = new Embed({
-            element: target,
-            url: 'http://www.example.com/'
-          })
+      import {
+        Embed,
+        MESSAGE_KIND,
+      } from "https://cdn.jsdelivr.net/npm/@super-api/super-api-embed/+esm";
+      document.addEventListener("DOMContentLoaded", () => {
+        const target = document.querySelector("#embed");
+        const embedInstance = new Embed({
+          element: target,
+          url: "http://www.example.com/",
+        });
 
-          console.log('Embed instance created');
-          console.log(embedInstance);
-      })
+        console.log("Embed instance created");
+        console.log(embedInstance);
+      });
     </script>
   </body>
 </html>
