@@ -1,9 +1,25 @@
 # SuperAPI Embed
 
-![NPM](https://img.shields.io/npm/v/@super-api/super-api-embed)
+![NPM Version](https://img.shields.io/npm/v/@super-api/super-api-embed)
+![License](https://img.shields.io/npm/l/@super-api/super-api-embed)
+![Types](https://img.shields.io/npm/types/@super-api/super-api-embed)
+![Weekly Downloads](https://img.shields.io/npm/dw/@super-api/super-api-embed)
+![Bundle Size](https://img.shields.io/bundlephobia/minzip/@super-api/super-api-embed)
 ![GitHub Workflow Status](https://github.com/supersimplesuper/super-api-embed/actions/workflows/super-api-embed.yml/badge.svg?branch=main)
 
 This is a JavaScript wrapper around the SuperAPI UI embed. It is designed to make interacting with the embed in the frontend easier.
+
+## Contents
+
+- [Usage](#usage)
+  - [Installation](#installation)
+  - [Creating an embed](#creating-an-embed)
+  - [Events](#events)
+  - [Instance methods](#instance-methods)
+- [Use with React](#use-with-react)
+- [Use without a JavaScript compiler](#use-without-a-javascript-compiler)
+- [FAQ](#faq)
+- [Contributing](#contributing)
 
 ## Usage
 
@@ -48,7 +64,7 @@ Once the loader has been setup you can then interact with returned instance of t
 
 #### Embed height
 
-The embed will automatically expand the iFrame to match the contents of what it is showing. If your layout has a fixed height, please place the iFrame in a container element with a style of `overflow-y: auto` to avoid the embed breaking your page layout.
+The embed will automatically expand the iFrame to match the contents of what it is showing. If your host page has a fixed height, see the [FAQ](#faq) for how to keep the embed from breaking your layout.
 
 #### Customising the loader
 
@@ -75,13 +91,13 @@ Here is an example of listening to the toast message being emitted from the embe
 import {
   Embed,
   MESSAGE_KIND,
-  ToastMessagePayloadV1,
+  ToastMessageDataV1,
 } from "@super-api/super-api-embed";
 
 // Listen for toast messages from SuperAPI and alert the user
-embed.on(MESSAGE_KIND.TOAST, (event: ToastMessagePayloadV1) => {
-  if (event.kind === "warning") {
-    alert(event.data.message);
+embed.on(MESSAGE_KIND.TOAST, (data: ToastMessageDataV1) => {
+  if (data.kind === "warning") {
+    alert(data.message);
   }
 });
 ```
@@ -128,13 +144,39 @@ Listen to this event when you want to update your UI to reflect the current step
 
 > Please do not use this event to update your systems (i.e. make API requests as a side-effect from this event). Utilise our webhooks instead.
 
+If a sticky header on your host page is hiding the top of the iFrame after a `PAGE_LOADED` scroll, see the [FAQ](#faq).
+
 #### MFA verification completed payload
 
 | Name          | Description                                                                                                                                  |
 | ------------- | -------------------------------------------------------------------------------------------------------------------------------------------- |
 | `verified_at` | An ISO 8601 timestamp indicating when the MFA session was verified. Will be `null` when the maximum number of verification attempts has been exceeded, allowing you to distinguish a successful verification from an exhausted one. |
 
-> If your page has a fixed/sticky header that overlaps the embed, set `scroll-padding-top` on the `html` element to your header's height. Otherwise the top of the iFrame may end up hidden behind the header after the `PAGE_LOADED` scroll.
+### Instance methods
+
+The object returned from `new Embed({ ... })` exposes the following methods. Event callbacks receive the event's payload (the inner `data`), not the full message envelope; the payload shape for each event is described in the [Events](#events) section.
+
+#### `embed.on(event, callback)`
+
+Subscribes `callback` to fire every time `event` is emitted. Returns the underlying event emitter so calls can be chained.
+
+```typescript
+embed.on(MESSAGE_KIND.LOADED, () => {
+  console.log("embed ready");
+});
+```
+
+#### `embed.once(event, callback)`
+
+Same as `on`, but the callback only fires on the first emission and is then automatically removed.
+
+#### `embed.off(event, callback)`
+
+Removes a previously registered callback for `event`. The same function reference passed to `on` must be passed here for removal to succeed.
+
+#### `embed.teardown()`
+
+Removes all registered event listeners, clears the embed's container element, and detaches the underlying `window` `message` handler. Call this when the embed is being unmounted (e.g. in a React effect cleanup) so the embed does not continue receiving messages or leaking listeners.
 
 ## Use with React
 
@@ -163,7 +205,7 @@ React.useEffect(() => {
   // Handle toast message being broadcast and show them using our custom toast
   // message displayer (this ensures that toast messages look native to our
   // application)
-  employerSettingsEmbed.on(MESSAGE_KIND.TOAST, (data: any) => {
+  employerSettingsEmbed.on(MESSAGE_KIND.TOAST, (data: ToastMessageDataV1) => {
     if (data.kind === "info") {
       toast(data.message);
     }
@@ -210,7 +252,8 @@ It's also possible to use this library without the use of a bundler or compiler:
     <h1>Working</h1>
     <div id="embed"></div>
     <script type="module">
-      import { Embed, MESSAGE_KIND } from 'https://cdn.jsdelivr.net/npm/@super-api/super-api-embed@4.3.0/+esm';
+      // Pin to a specific version for production. Omit the version to always resolve the latest release.
+      import { Embed, MESSAGE_KIND } from 'https://cdn.jsdelivr.net/npm/@super-api/super-api-embed/+esm';
       document.addEventListener('DOMContentLoaded', () => {
           const target = document.querySelector("#embed");
           const embedInstance = new Embed({
@@ -218,13 +261,23 @@ It's also possible to use this library without the use of a bundler or compiler:
             url: 'http://www.example.com/'
           })
 
-          console.log('Embed instance created:)
+          console.log('Embed instance created');
           console.log(embedInstance);
       })
     </script>
   </body>
 </html>
 ```
+
+## FAQ
+
+### The embed is making my page scroll or breaking my fixed-height layout. How do I fix it?
+
+The embed automatically expands its iFrame to match the height of the content it is showing. If your host page has a fixed height and you do not want the embed to push past that height, place the iFrame inside a container element with `overflow-y: auto`. The container will scroll instead of your whole page.
+
+### After the embed navigates to a new page, the top is hidden behind my sticky header. How do I fix it?
+
+When a new page loads inside the embed, the library scrolls the iFrame to the top of the viewport so the user sees the new content (this is the `PAGE_LOADED` event behaviour). If your host page has a fixed or sticky header that overlaps the embed, set `scroll-padding-top` on the `html` element to your header's height. The scroll will then leave room for your header.
 
 ## Contributing
 
@@ -240,7 +293,7 @@ Commands:
 
 ### Tests
 
-TypeScript Library Starter uses [Node.js's native test runner](https://nodejs.org/api/test.html). Coverage is done using [c8](https://github.com/bcoe/c8) but will switch to Node.js's one once out.
+Tests run on [Node.js's native test runner](https://nodejs.org/api/test.html). Coverage is collected via [c8](https://github.com/bcoe/c8); this will switch to Node.js's own coverage tooling once it is out of experimental.
 
 Commands:
 
