@@ -86,110 +86,55 @@ embed.on(MESSAGE_KIND.TOAST, (event: ToastMessagePayloadV1) => {
 });
 ```
 
-#### Toast message
+The full list of events is below. Events marked _none_ in the **Data** column are fired without a payload; events with a linked payload have their data shape documented further down.
 
-Subscribe using: `MESSAGE_KIND.TOAST`
+| Event                         | Constant                                  | Data                                                | When it fires                                                                                                                                                            |
+| ----------------------------- | ----------------------------------------- | --------------------------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------ |
+| Toast message                 | `MESSAGE_KIND.TOAST`                      | [See payload](#toast-payload)                       | A notification should be shown to the user, e.g. when they have selected a fund.                                                                                         |
+| Window dimension change       | `MESSAGE_KIND.WINDOW_DIMENSION_CHANGE`    | [See payload](#window-dimension-change-payload)     | The DOM contents of the embed have changed and caused the height of the embed to change.                                                                                 |
+| Loaded                        | `MESSAGE_KIND.LOADED`                     | _none_                                              | The embed has finished loading.                                                                                                                                          |
+| Employer settings updated¹    | `MESSAGE_KIND.EMPLOYER_SETTINGS_UPDATED`  | _none_                                              | An update has been made to the employer settings but the change has not yet been delivered to the partner system.                                                        |
+| Employer settings committed¹  | `MESSAGE_KIND.EMPLOYER_SETTINGS_COMMITTED`| _none_                                              | A change to the employer settings has been committed into the partner system (the partner webhook responded with a `<400` status code).                                  |
+| Onboarding intent completed   | `MESSAGE_KIND.ONBOARDING_INTENT_COMPLETED`| _none_                                              | A user has completed their onboarding session intent. Useful for showing a "processing" state while waiting for the webhook to complete.                                 |
+| Onboarding session committed  | `MESSAGE_KIND.ONBOARDING_SESSION_COMMITTED`| _none_                                             | A user has completed the onboarding flow and the data has been delivered into the partner system (the same "committed" rules as employer settings apply here).           |
+| Onboarding session finished   | `MESSAGE_KIND.ONBOARDING_SESSION_FINISHED`| _none_                                              | A user has finished the onboarding flow but the payload has not yet been transmitted. Use this to move the user to the next step without waiting on async provisioning.  |
+| Onboarding step changed       | `MESSAGE_KIND.ONBOARDING_STEP_CHANGED`    | [See payload](#onboarding-step-changed-payload)     | The embed has loaded, or the user has moved to the next step in the onboarding flow.                                                                                     |
+| MFA verification completed    | `MESSAGE_KIND.MFA_VERIFICATION_COMPLETED` | [See payload](#mfa-verification-completed-payload)  | The user has finished their MFA session, either by verifying successfully or by exhausting the maximum number of verification attempts.                                  |
+| Page loaded                   | `MESSAGE_KIND.PAGE_LOADED`                | _none_                                              | A new page is loaded inside the embed. The embed will also scroll the iFrame to the top of the viewport so the new page is visible.                                      |
 
-Fired when a notification message should be shown to the user, i.e. when they have selected a fund.
+¹ Only fires for URLs which load the employer settings embed. The updated/committed pair can be used together to drive a busy/in-flight state in your UI.
 
-The data component of this event contains:
+#### Toast payload
 
 | Name    | Description                                                                   |
 | ------- | ----------------------------------------------------------------------------- |
 | kind    | The level of the toast, one of either "success", "error", "info" or "warning" |
 | message | The content of the message, i.e. "Thank you for your selection"               |
 
-#### Window dimension change
-
-Subscribe using: `MESSAGE_KIND.WINDOW_DIMENSION_CHANGE`
-
-Fired when the DOM contents of the embed has changed and caused the height of the embed to change.
+#### Window dimension change payload
 
 | Name   | Description                                                      |
 | ------ | ---------------------------------------------------------------- |
 | bounds | A `DOMRect` instance which contains the dimensions of the widget |
 
-#### Loaded
-
-Subscribe using: `MESSAGE_KIND.LOADED`
-
-Fired when the embed has finished loading.
-
-No data is passed with this event.
-
-#### Employer settings updated
-
-Subscribe using: `MESSAGE_KIND.EMPLOYER_SETTINGS_UPDATED`
-
-Fired when an update has been made to the employer settings but the data changes have not been delivered to the partner system. Only fires for URLs which load the employer settings embed.
-
-No data is passed with this event.
-
-#### Employer settings committed
-
-Subscribe using: `MESSAGE_KIND.EMPLOYER_SETTINGS_COMMITTED`
-
-Fired when a change to the employer settings has been committed into the partners system. This fires when the webhook delivering the data into the partner has responded with a < 400 status code. Only fires for URLs which load the employer settings embed.
-
-This can be used in combination with the employer settings updated to create a busy state which can show the update to the employer details being in flight.
-
-No data is passed with this event.
-
-#### Onboarding intent completed
-
-Subscribe using: `MESSAGE_KIND.ONBOARDING_INTENT_COMPLETED`
-
-Fired when a user has completed their onboarding session intent. Intents allow users to customise certain aspects of an onboarding session which will be shown to their employees.
-
-This can be used to notify the user that their intent is being processed while they are waiting for the webhook to arrive and complete.
-
-No data is passed with this event.
-
-#### Onboarding session committed
-
-Subscribe using: `MESSAGE_KIND.ONBOARDING_SESSION_COMMITTED`
-
-Fired when a user has completed the onboarding flow and the information has been delivered into the partner system (the same "committed" rules as the employer settings apply here)
-
-No data is passed with this event.
-
-#### Onboarding session finished
-
-Subscribe using: `MESSAGE_KIND.ONBOARDING_SESSION_FINISHED`
-
-Fired when a user has finished the onboarding flow but we have not transmitted the payload of data. As some provisioning of member details is asynchronous you will most likely be listening to this event to move the user to the next step of the onboarding.
-
-No data is passed with this event.
-
-#### Onboarding step changed
-
-Subscribe using: `MESSAGE_KIND.ONBOARDING_STEP_CHANGED`
-
-Fired when the following events occur:
-
-1. The embed has loaded. `current_step` will be the step that the user is currently on.
-2. The user has moved to the next step in the onboarding flow. In this case, `current_step` will reflect this next step.
-
-The data component of this event contains:
+#### Onboarding step changed payload
 
 | Name           | Description                                   |
 | -------------- | --------------------------------------------- |
 | `current_step` | The current step of the onboarding flow       |
 | `steps`        | All steps associated with the onboarding flow |
 
-This event should be listened to when you want to update your UI to reflect the current step that the user is on.
+Listen to this event when you want to update your UI to reflect the current step that the user is on. The event fires twice in the lifecycle worth being aware of: once when the embed first loads (with `current_step` set to wherever the user is resuming from), and again each time they advance to the next step.
 
 > Please do not use this event to update your systems (i.e. make API requests as a side-effect from this event). Utilise our webhooks instead.
 
-#### Page loaded
+#### MFA verification completed payload
 
-Subscribe using: `MESSAGE_KIND.PAGE_LOADED`
+| Name          | Description                                                                                                                                  |
+| ------------- | -------------------------------------------------------------------------------------------------------------------------------------------- |
+| `verified_at` | An ISO 8601 timestamp indicating when the MFA session was verified. Will be `null` when the maximum number of verification attempts has been exceeded, allowing you to distinguish a successful verification from an exhausted one. |
 
-Fired when a new page is loaded inside the embed. When this event is received the embed will also scroll the iFrame to the top of the viewport so the new page is visible to the user.
-
-No data is passed with this event.
-
-> If your page has a fixed/sticky header that overlaps the embed, set `scroll-padding-top` on the `html` element to your header's height — otherwise the top of the iFrame may end up hidden behind the header after the scroll.
+> If your page has a fixed/sticky header that overlaps the embed, set `scroll-padding-top` on the `html` element to your header's height. Otherwise the top of the iFrame may end up hidden behind the header after the `PAGE_LOADED` scroll.
 
 ## Use with React
 
