@@ -19,6 +19,7 @@ This is a JavaScript wrapper around the SuperAPI UI embed. It is designed to mak
 - [Use with React](#use-with-react)
 - [Use without a JavaScript compiler](#use-without-a-javascript-compiler)
 - [FAQ](#faq)
+- [Debugging](#debugging)
 - [Contributing](#contributing)
 
 ## Usage
@@ -281,6 +282,20 @@ The embed automatically expands its iFrame to match the height of the content it
 ### After the embed navigates to a new page, the top is hidden behind my sticky header. How do I fix it?
 
 When a new page loads inside the embed, the library scrolls the iFrame to the top of the viewport so the user sees the new content (this is the `PAGE_LOADED` event behaviour). If your host page has a fixed or sticky header that overlaps the embed, set `scroll-padding-top` on the `html` element to your header's height. The scroll will then leave room for your header.
+
+## Debugging
+
+The embed uses [`loglevel`](https://github.com/pimterry/loglevel) internally. By default only warnings and errors are logged, but you can turn on debug logging from the browser DevTools console on the page hosting the embed:
+
+```js
+localStorage.setItem("loglevel", "DEBUG");
+```
+
+Reload the page to activate the new level. You can also use `TRACE`, `INFO`, `WARN`, `ERROR` or `SILENT` in place of `DEBUG`. To turn debugging off again, remove the key and reload:
+
+```js
+localStorage.removeItem("loglevel");
+```
 
 ## Contributing
 
