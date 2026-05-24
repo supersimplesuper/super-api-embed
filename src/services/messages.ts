@@ -8,6 +8,7 @@ export enum MESSAGE_KIND {
   ONBOARDING_STEP_CHANGED = "onboardingStepChanged",
   ONBOARDING_SESSION_FINISHED = "onboardingSessionFinished",
   PAGE_LOADED = "pageLoaded",
+  SCROLL_INTO_VIEW = "scrollIntoView",
   TOAST = "toast",
   WINDOW_DIMENSION_CHANGE = "windowDimensionChange",
 }

@@ -39,6 +39,10 @@ import type {
   Message as PageLoadedMessageV1,
 } from "./services/messages/v1/page_loaded";
 import type {
+  Data as ScrollIntoViewDataV1,
+  Message as ScrollIntoViewMessageV1,
+} from "./services/messages/v1/scroll_into_view";
+import type {
   Data as ToastMessageDataV1,
   Kind as ToastKindV1,
   Message as ToastMessageV1,
@@ -60,6 +64,7 @@ export {
 export { OnboardingSessionFinishedDataV1, OnboardingSessionFinishedMessageV1 };
 export { OnboardingStepChangedDataV1, OnboardingStepChangedMessageV1 };
 export { PageLoadedDataV1, PageLoadedMessageV1 };
+export { ScrollIntoViewDataV1, ScrollIntoViewMessageV1 };
 export { ToastKindV1, ToastMessageDataV1, ToastMessageV1 };
 export { LoadedMessageDataV1, LoadedMessageV1 };
 export { WindowDimensionChangeMessageDataV1, WindowDimensionChangeMessageV1 };
@@ -74,6 +79,7 @@ export type AvailableMessages =
   | OnboardingSessionFinishedMessageV1
   | OnboardingStepChangedMessageV1
   | PageLoadedMessageV1
+  | ScrollIntoViewMessageV1
   | ToastMessageV1
   | WindowDimensionChangeMessageV1;
 
@@ -87,6 +93,7 @@ export type MessageKindToTypeMap = {
   [MESSAGE_KIND.ONBOARDING_SESSION_FINISHED]: OnboardingSessionFinishedDataV1;
   [MESSAGE_KIND.ONBOARDING_STEP_CHANGED]: OnboardingStepChangedDataV1;
   [MESSAGE_KIND.PAGE_LOADED]: PageLoadedDataV1;
+  [MESSAGE_KIND.SCROLL_INTO_VIEW]: ScrollIntoViewDataV1;
   [MESSAGE_KIND.TOAST]: ToastMessageDataV1;
   [MESSAGE_KIND.WINDOW_DIMENSION_CHANGE]: WindowDimensionChangeMessageDataV1;
 };
@@ -300,6 +307,23 @@ export class Embed {
         log.debug("Reacting to page load, scrolling iFrame into view");
 
         this.iframe.scrollIntoView({ behavior: "instant", block: "start" });
+
+        this.bus.emit(event.data.kind, event.data.data);
+
+        break;
+      }
+
+      case MESSAGE_KIND.SCROLL_INTO_VIEW: {
+        const { offsetTop } = event.data.data;
+
+        log.debug(
+          `Reacting to scroll into view, scrolling host to iFrame offset ${offsetTop}`,
+        );
+
+        const previousScrollMargin = this.iframe.style.scrollMarginTop;
+        this.iframe.style.scrollMarginTop = `-${offsetTop}px`;
+        this.iframe.scrollIntoView({ behavior: "smooth", block: "start" });
+        this.iframe.style.scrollMarginTop = previousScrollMargin;
 
         this.bus.emit(event.data.kind, event.data.data);
 

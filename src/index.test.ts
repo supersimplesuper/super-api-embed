@@ -498,6 +498,111 @@ describe("Embed", () => {
           });
         });
       });
+
+      describe("scroll into view event", () => {
+        let scrollMarginAtCallTime: string | undefined;
+
+        beforeEach(() => {
+          scrollMarginAtCallTime = undefined;
+          Element.prototype.scrollIntoView = jest.fn(function (
+            this: HTMLElement,
+          ) {
+            scrollMarginAtCallTime = this.style.scrollMarginTop;
+          });
+        });
+
+        it("logs the event", () => {
+          fireEvent(
+            window,
+            new MessageEvent("message", {
+              data: {
+                kind: MESSAGE_KIND.SCROLL_INTO_VIEW,
+                data: { offsetTop: 240 },
+              },
+              origin: "https://api.superapi.com.au",
+            }),
+          );
+
+          // eslint-disable-next-line @typescript-eslint/unbound-method
+          expect(loglevel.debug).toHaveBeenCalledWith(
+            "Reacting to scroll into view, scrolling host to iFrame offset 240",
+          );
+        });
+
+        it("calls externally bound listener", () => {
+          const listener = jest.fn();
+
+          const data = {
+            kind: MESSAGE_KIND.SCROLL_INTO_VIEW,
+            data: { offsetTop: 240 },
+          };
+
+          embed.on(MESSAGE_KIND.SCROLL_INTO_VIEW, listener);
+
+          fireEvent(
+            window,
+            new MessageEvent("message", {
+              data,
+              origin: "https://api.superapi.com.au",
+            }),
+          );
+
+          expect(listener).toHaveBeenCalledWith(data.data);
+        });
+
+        it("smooth-scrolls the iframe into view", () => {
+          fireEvent(
+            window,
+            new MessageEvent("message", {
+              data: {
+                kind: MESSAGE_KIND.SCROLL_INTO_VIEW,
+                data: { offsetTop: 240 },
+              },
+              origin: "https://api.superapi.com.au",
+            }),
+          );
+
+          // eslint-disable-next-line @typescript-eslint/unbound-method
+          expect(Element.prototype.scrollIntoView).toHaveBeenCalledWith({
+            behavior: "smooth",
+            block: "start",
+          });
+        });
+
+        it("applies a negative scrollMarginTop on the iframe for the scrollIntoView call", () => {
+          fireEvent(
+            window,
+            new MessageEvent("message", {
+              data: {
+                kind: MESSAGE_KIND.SCROLL_INTO_VIEW,
+                data: { offsetTop: 240 },
+              },
+              origin: "https://api.superapi.com.au",
+            }),
+          );
+
+          expect(scrollMarginAtCallTime).toBe("-240px");
+        });
+
+        it("restores the iframe scrollMarginTop after scrolling", () => {
+          const scope = within(element);
+          const iframe = scope.getByTestId("iframe");
+          iframe.style.scrollMarginTop = "16px";
+
+          fireEvent(
+            window,
+            new MessageEvent("message", {
+              data: {
+                kind: MESSAGE_KIND.SCROLL_INTO_VIEW,
+                data: { offsetTop: 240 },
+              },
+              origin: "https://api.superapi.com.au",
+            }),
+          );
+
+          expect(iframe.style.scrollMarginTop).toBe("16px");
+        });
+      });
     });
   });
 
