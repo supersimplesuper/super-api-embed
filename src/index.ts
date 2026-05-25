@@ -320,8 +320,9 @@ export class Embed {
           `Reacting to scroll into view, scrolling host to iFrame offset ${offsetTop}`,
         );
 
+        const iframeHeight = this.iframe.getBoundingClientRect().height;
         const previousScrollMargin = this.iframe.style.scrollMarginTop;
-        this.iframe.style.scrollMarginTop = `-${offsetTop}px`;
+        this.iframe.style.scrollMarginTop = `${iframeHeight - 2 * offsetTop}px`;
         this.iframe.scrollIntoView({ behavior: "smooth", block: "center" });
         this.iframe.style.scrollMarginTop = previousScrollMargin;
 

@@ -569,7 +569,11 @@ describe("Embed", () => {
           });
         });
 
-        it("applies a negative scrollMarginTop on the iframe for the scrollIntoView call", () => {
+        it("applies a scrollMarginTop that centers the offset in the viewport", () => {
+          const scope = within(element);
+          const iframe = scope.getByTestId("iframe");
+          const iframeHeight = iframe.getBoundingClientRect().height;
+
           fireEvent(
             window,
             new MessageEvent("message", {
@@ -581,7 +585,7 @@ describe("Embed", () => {
             }),
           );
 
-          expect(scrollMarginAtCallTime).toBe("-240px");
+          expect(scrollMarginAtCallTime).toBe(`${iframeHeight - 2 * 240}px`);
         });
 
         it("restores the iframe scrollMarginTop after scrolling", () => {
