@@ -565,7 +565,7 @@ describe("Embed", () => {
           // eslint-disable-next-line @typescript-eslint/unbound-method
           expect(Element.prototype.scrollIntoView).toHaveBeenCalledWith({
             behavior: "smooth",
-            block: "start",
+            block: "center",
           });
         });
 

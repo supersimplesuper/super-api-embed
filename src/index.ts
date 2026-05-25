@@ -322,7 +322,7 @@ export class Embed {
 
         const previousScrollMargin = this.iframe.style.scrollMarginTop;
         this.iframe.style.scrollMarginTop = `-${offsetTop}px`;
-        this.iframe.scrollIntoView({ behavior: "smooth", block: "start" });
+        this.iframe.scrollIntoView({ behavior: "smooth", block: "center" });
         this.iframe.style.scrollMarginTop = previousScrollMargin;
 
         this.bus.emit(event.data.kind, event.data.data);
