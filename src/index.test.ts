@@ -9,6 +9,16 @@ import { Embed, MESSAGE_KIND } from "./index";
 let element: HTMLDivElement;
 let embed: Embed;
 
+function postMessage(data: unknown) {
+  fireEvent(
+    window,
+    new MessageEvent("message", {
+      data,
+      origin: "https://api.superapi.com.au",
+    }),
+  );
+}
+
 describe("Embed", () => {
   describe("with default options", () => {
     beforeEach(() => {
@@ -73,18 +83,10 @@ describe("Embed", () => {
         const scope = within(element);
         const loader = scope.getByTestId("loader");
 
-        const data = {
+        postMessage({
           kind: MESSAGE_KIND.LOADED,
           data: null,
-        };
-
-        fireEvent(
-          window,
-          new MessageEvent("message", {
-            data,
-            origin: "https://api.superapi.com.au",
-          }),
-        );
+        });
 
         expect(element).not.toContainElement(loader);
       });
@@ -130,15 +132,9 @@ describe("Embed", () => {
       });
 
       it("logs incoming messages", () => {
-        fireEvent(
-          window,
-          new MessageEvent("message", {
-            data: {
-              hello: "world",
-            },
-            origin: "https://api.superapi.com.au",
-          }),
-        );
+        postMessage({
+          hello: "world",
+        });
 
         // eslint-disable-next-line @typescript-eslint/unbound-method
         expect(loglevel.info).toHaveBeenCalledWith(
@@ -147,15 +143,9 @@ describe("Embed", () => {
       });
 
       it("warns on unknown messages", () => {
-        fireEvent(
-          window,
-          new MessageEvent("message", {
-            data: {
-              hello: "world",
-            },
-            origin: "https://api.superapi.com.au",
-          }),
-        );
+        postMessage({
+          hello: "world",
+        });
 
         // eslint-disable-next-line @typescript-eslint/unbound-method
         expect(loglevel.warn).toHaveBeenCalledWith(
@@ -167,22 +157,16 @@ describe("Embed", () => {
         it("calls externally bound listener", () => {
           const listener = jest.fn();
 
-          const data = {
+          const message = {
             kind: MESSAGE_KIND.EMPLOYER_SETTINGS_COMMITTED,
             data: null,
           };
 
           embed.on(MESSAGE_KIND.EMPLOYER_SETTINGS_COMMITTED, listener);
 
-          fireEvent(
-            window,
-            new MessageEvent("message", {
-              data,
-              origin: "https://api.superapi.com.au",
-            }),
-          );
+          postMessage(message);
 
-          expect(listener).toHaveBeenCalledWith(data.data);
+          expect(listener).toHaveBeenCalledWith(message.data);
         });
       });
 
@@ -190,22 +174,16 @@ describe("Embed", () => {
         it("calls externally bound listener", () => {
           const listener = jest.fn();
 
-          const data = {
+          const message = {
             kind: MESSAGE_KIND.EMPLOYER_SETTINGS_UPDATED,
             data: null,
           };
 
           embed.on(MESSAGE_KIND.EMPLOYER_SETTINGS_UPDATED, listener);
 
-          fireEvent(
-            window,
-            new MessageEvent("message", {
-              data,
-              origin: "https://api.superapi.com.au",
-            }),
-          );
+          postMessage(message);
 
-          expect(listener).toHaveBeenCalledWith(data.data);
+          expect(listener).toHaveBeenCalledWith(message.data);
         });
       });
 
@@ -213,22 +191,16 @@ describe("Embed", () => {
         it("calls externally bound listener", () => {
           const listener = jest.fn();
 
-          const data = {
+          const message = {
             kind: MESSAGE_KIND.LOADED,
             data: null,
           };
 
           embed.on(MESSAGE_KIND.LOADED, listener);
 
-          fireEvent(
-            window,
-            new MessageEvent("message", {
-              data,
-              origin: "https://api.superapi.com.au",
-            }),
-          );
+          postMessage(message);
 
-          expect(listener).toHaveBeenCalledWith(data.data);
+          expect(listener).toHaveBeenCalledWith(message.data);
         });
       });
 
@@ -236,22 +208,16 @@ describe("Embed", () => {
         it("calls externally bound listener", () => {
           const listener = jest.fn();
 
-          const data = {
+          const message = {
             kind: MESSAGE_KIND.ONBOARDING_SESSION_COMMITTED,
             data: null,
           };
 
           embed.on(MESSAGE_KIND.ONBOARDING_SESSION_COMMITTED, listener);
 
-          fireEvent(
-            window,
-            new MessageEvent("message", {
-              data,
-              origin: "https://api.superapi.com.au",
-            }),
-          );
+          postMessage(message);
 
-          expect(listener).toHaveBeenCalledWith(data.data);
+          expect(listener).toHaveBeenCalledWith(message.data);
         });
       });
 
@@ -259,7 +225,7 @@ describe("Embed", () => {
         it("calls externally bound listener", () => {
           const listener = jest.fn();
 
-          const data = {
+          const message = {
             kind: MESSAGE_KIND.TOAST,
             data: {
               kind: "success",
@@ -269,15 +235,9 @@ describe("Embed", () => {
 
           embed.on(MESSAGE_KIND.TOAST, listener);
 
-          fireEvent(
-            window,
-            new MessageEvent("message", {
-              data,
-              origin: "https://api.superapi.com.au",
-            }),
-          );
+          postMessage(message);
 
-          expect(listener).toHaveBeenCalledWith(data.data);
+          expect(listener).toHaveBeenCalledWith(message.data);
         });
       });
 
@@ -285,22 +245,16 @@ describe("Embed", () => {
         it("calls externally bound listener", () => {
           const listener = jest.fn();
 
-          const data = {
+          const message = {
             kind: MESSAGE_KIND.ONBOARDING_INTENT_COMPLETED,
             data: null,
           };
 
           embed.on(MESSAGE_KIND.ONBOARDING_INTENT_COMPLETED, listener);
 
-          fireEvent(
-            window,
-            new MessageEvent("message", {
-              data,
-              origin: "https://api.superapi.com.au",
-            }),
-          );
+          postMessage(message);
 
-          expect(listener).toHaveBeenCalledWith(data.data);
+          expect(listener).toHaveBeenCalledWith(message.data);
         });
       });
 
@@ -308,7 +262,7 @@ describe("Embed", () => {
         it("calls externally bound listener", () => {
           const listener = jest.fn();
 
-          const data = {
+          const message = {
             kind: MESSAGE_KIND.ONBOARDING_STEP_CHANGED,
             data: {
               current_step: "collect_super_details",
@@ -326,15 +280,9 @@ describe("Embed", () => {
 
           embed.on(MESSAGE_KIND.ONBOARDING_STEP_CHANGED, listener);
 
-          fireEvent(
-            window,
-            new MessageEvent("message", {
-              data,
-              origin: "https://api.superapi.com.au",
-            }),
-          );
+          postMessage(message);
 
-          expect(listener).toHaveBeenCalledWith(data.data);
+          expect(listener).toHaveBeenCalledWith(message.data);
         });
       });
 
@@ -342,7 +290,7 @@ describe("Embed", () => {
         it("calls the bound listener", () => {
           const listener = jest.fn();
 
-          const data = {
+          const message = {
             kind: MESSAGE_KIND.MFA_VERIFICATION_COMPLETED,
             data: {
               verified_at: "2025-06-11T04:56:46.372459Z",
@@ -352,34 +300,22 @@ describe("Embed", () => {
 
           embed.on(MESSAGE_KIND.MFA_VERIFICATION_COMPLETED, listener);
 
-          fireEvent(
-            window,
-            new MessageEvent("message", {
-              data,
-              origin: "https://api.superapi.com.au",
-            }),
-          );
+          postMessage(message);
 
-          expect(listener).toHaveBeenCalledWith(data.data);
+          expect(listener).toHaveBeenCalledWith(message.data);
         });
       });
 
       describe("window dimensions change event", () => {
         it("logs the event", () => {
-          fireEvent(
-            window,
-            new MessageEvent("message", {
-              data: {
-                kind: MESSAGE_KIND.WINDOW_DIMENSION_CHANGE,
-                data: {
-                  bounds: {
-                    height: 200,
-                  },
-                },
+          postMessage({
+            kind: MESSAGE_KIND.WINDOW_DIMENSION_CHANGE,
+            data: {
+              bounds: {
+                height: 200,
               },
-              origin: "https://api.superapi.com.au",
-            }),
-          );
+            },
+          });
 
           // eslint-disable-next-line @typescript-eslint/unbound-method
           expect(loglevel.debug).toHaveBeenCalledWith(
@@ -390,7 +326,7 @@ describe("Embed", () => {
         it("calls externally bound listener", () => {
           const listener = jest.fn();
 
-          const data = {
+          const message = {
             kind: MESSAGE_KIND.WINDOW_DIMENSION_CHANGE,
             data: {
               bounds: {
@@ -401,32 +337,20 @@ describe("Embed", () => {
 
           embed.on(MESSAGE_KIND.WINDOW_DIMENSION_CHANGE, listener);
 
-          fireEvent(
-            window,
-            new MessageEvent("message", {
-              data,
-              origin: "https://api.superapi.com.au",
-            }),
-          );
+          postMessage(message);
 
-          expect(listener).toHaveBeenCalledWith(data.data);
+          expect(listener).toHaveBeenCalledWith(message.data);
         });
 
         it("sets the height of the iframe", () => {
-          fireEvent(
-            window,
-            new MessageEvent("message", {
-              data: {
-                kind: MESSAGE_KIND.WINDOW_DIMENSION_CHANGE,
-                data: {
-                  bounds: {
-                    height: 200,
-                  },
-                },
+          postMessage({
+            kind: MESSAGE_KIND.WINDOW_DIMENSION_CHANGE,
+            data: {
+              bounds: {
+                height: 200,
               },
-              origin: "https://api.superapi.com.au",
-            }),
-          );
+            },
+          });
 
           const scope = within(element);
           const iframe = scope.getByTestId("iframe");
@@ -441,16 +365,10 @@ describe("Embed", () => {
         });
 
         it("logs the event", () => {
-          fireEvent(
-            window,
-            new MessageEvent("message", {
-              data: {
-                kind: MESSAGE_KIND.PAGE_LOADED,
-                data: null,
-              },
-              origin: "https://api.superapi.com.au",
-            }),
-          );
+          postMessage({
+            kind: MESSAGE_KIND.PAGE_LOADED,
+            data: null,
+          });
 
           // eslint-disable-next-line @typescript-eslint/unbound-method
           expect(loglevel.debug).toHaveBeenCalledWith(
@@ -461,35 +379,23 @@ describe("Embed", () => {
         it("calls externally bound listener", () => {
           const listener = jest.fn();
 
-          const data = {
+          const message = {
             kind: MESSAGE_KIND.PAGE_LOADED,
             data: null,
           };
 
           embed.on(MESSAGE_KIND.PAGE_LOADED, listener);
 
-          fireEvent(
-            window,
-            new MessageEvent("message", {
-              data,
-              origin: "https://api.superapi.com.au",
-            }),
-          );
+          postMessage(message);
 
-          expect(listener).toHaveBeenCalledWith(data.data);
+          expect(listener).toHaveBeenCalledWith(message.data);
         });
 
         it("scrolls the iframe into view", () => {
-          fireEvent(
-            window,
-            new MessageEvent("message", {
-              data: {
-                kind: MESSAGE_KIND.PAGE_LOADED,
-                data: null,
-              },
-              origin: "https://api.superapi.com.au",
-            }),
-          );
+          postMessage({
+            kind: MESSAGE_KIND.PAGE_LOADED,
+            data: null,
+          });
 
           // eslint-disable-next-line @typescript-eslint/unbound-method
           expect(Element.prototype.scrollIntoView).toHaveBeenCalledWith({
@@ -512,16 +418,10 @@ describe("Embed", () => {
         });
 
         it("logs the event", () => {
-          fireEvent(
-            window,
-            new MessageEvent("message", {
-              data: {
-                kind: MESSAGE_KIND.SCROLL_INTO_VIEW,
-                data: { offsetTop: 240 },
-              },
-              origin: "https://api.superapi.com.au",
-            }),
-          );
+          postMessage({
+            kind: MESSAGE_KIND.SCROLL_INTO_VIEW,
+            data: { offsetTop: 240 },
+          });
 
           // eslint-disable-next-line @typescript-eslint/unbound-method
           expect(loglevel.debug).toHaveBeenCalledWith(
@@ -532,35 +432,23 @@ describe("Embed", () => {
         it("calls externally bound listener", () => {
           const listener = jest.fn();
 
-          const data = {
+          const message = {
             kind: MESSAGE_KIND.SCROLL_INTO_VIEW,
             data: { offsetTop: 240 },
           };
 
           embed.on(MESSAGE_KIND.SCROLL_INTO_VIEW, listener);
 
-          fireEvent(
-            window,
-            new MessageEvent("message", {
-              data,
-              origin: "https://api.superapi.com.au",
-            }),
-          );
+          postMessage(message);
 
-          expect(listener).toHaveBeenCalledWith(data.data);
+          expect(listener).toHaveBeenCalledWith(message.data);
         });
 
         it("smooth-scrolls the iframe into view", () => {
-          fireEvent(
-            window,
-            new MessageEvent("message", {
-              data: {
-                kind: MESSAGE_KIND.SCROLL_INTO_VIEW,
-                data: { offsetTop: 240 },
-              },
-              origin: "https://api.superapi.com.au",
-            }),
-          );
+          postMessage({
+            kind: MESSAGE_KIND.SCROLL_INTO_VIEW,
+            data: { offsetTop: 240 },
+          });
 
           // eslint-disable-next-line @typescript-eslint/unbound-method
           expect(Element.prototype.scrollIntoView).toHaveBeenCalledWith({
@@ -574,16 +462,10 @@ describe("Embed", () => {
           const iframe = scope.getByTestId("iframe");
           const iframeHeight = iframe.getBoundingClientRect().height;
 
-          fireEvent(
-            window,
-            new MessageEvent("message", {
-              data: {
-                kind: MESSAGE_KIND.SCROLL_INTO_VIEW,
-                data: { offsetTop: 240 },
-              },
-              origin: "https://api.superapi.com.au",
-            }),
-          );
+          postMessage({
+            kind: MESSAGE_KIND.SCROLL_INTO_VIEW,
+            data: { offsetTop: 240 },
+          });
 
           expect(scrollMarginAtCallTime).toBe(`${iframeHeight - 2 * 240}px`);
         });
@@ -593,16 +475,10 @@ describe("Embed", () => {
           const iframe = scope.getByTestId("iframe");
           iframe.style.scrollMarginTop = "16px";
 
-          fireEvent(
-            window,
-            new MessageEvent("message", {
-              data: {
-                kind: MESSAGE_KIND.SCROLL_INTO_VIEW,
-                data: { offsetTop: 240 },
-              },
-              origin: "https://api.superapi.com.au",
-            }),
-          );
+          postMessage({
+            kind: MESSAGE_KIND.SCROLL_INTO_VIEW,
+            data: { offsetTop: 240 },
+          });
 
           expect(iframe.style.scrollMarginTop).toBe("16px");
         });
@@ -726,18 +602,10 @@ describe("Embed", () => {
       fireEvent.load(iframe);
 
       // Simulate the embed reporting that it has loaded correctly
-      const data = {
+      postMessage({
         kind: MESSAGE_KIND.LOADED,
         data: null,
-      };
-
-      fireEvent(
-        window,
-        new MessageEvent("message", {
-          data,
-          origin: "https://api.superapi.com.au",
-        }),
-      );
+      });
 
       // At this point the flag should be set
       expect(localEmbed.embedSuccessfullyInitialized).toBe(true);
