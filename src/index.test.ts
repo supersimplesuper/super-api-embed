@@ -19,6 +19,18 @@ function postMessage(data: unknown) {
   );
 }
 
+function itCallsBoundListener(kind: MESSAGE_KIND, payload: unknown = null) {
+  it("calls externally bound listener", () => {
+    const listener = jest.fn();
+
+    embed.on(kind, listener);
+
+    postMessage({ kind, data: payload });
+
+    expect(listener).toHaveBeenCalledWith(payload);
+  });
+}
+
 describe("Embed", () => {
   describe("with default options", () => {
     beforeEach(() => {
@@ -154,155 +166,51 @@ describe("Embed", () => {
       });
 
       describe("employer settings committed", () => {
-        it("calls externally bound listener", () => {
-          const listener = jest.fn();
-
-          const message = {
-            kind: MESSAGE_KIND.EMPLOYER_SETTINGS_COMMITTED,
-            data: null,
-          };
-
-          embed.on(MESSAGE_KIND.EMPLOYER_SETTINGS_COMMITTED, listener);
-
-          postMessage(message);
-
-          expect(listener).toHaveBeenCalledWith(message.data);
-        });
+        itCallsBoundListener(MESSAGE_KIND.EMPLOYER_SETTINGS_COMMITTED);
       });
 
       describe("employer settings updated", () => {
-        it("calls externally bound listener", () => {
-          const listener = jest.fn();
-
-          const message = {
-            kind: MESSAGE_KIND.EMPLOYER_SETTINGS_UPDATED,
-            data: null,
-          };
-
-          embed.on(MESSAGE_KIND.EMPLOYER_SETTINGS_UPDATED, listener);
-
-          postMessage(message);
-
-          expect(listener).toHaveBeenCalledWith(message.data);
-        });
+        itCallsBoundListener(MESSAGE_KIND.EMPLOYER_SETTINGS_UPDATED);
       });
 
       describe("loaded", () => {
-        it("calls externally bound listener", () => {
-          const listener = jest.fn();
-
-          const message = {
-            kind: MESSAGE_KIND.LOADED,
-            data: null,
-          };
-
-          embed.on(MESSAGE_KIND.LOADED, listener);
-
-          postMessage(message);
-
-          expect(listener).toHaveBeenCalledWith(message.data);
-        });
+        itCallsBoundListener(MESSAGE_KIND.LOADED);
       });
 
       describe("onboarding session complete committed", () => {
-        it("calls externally bound listener", () => {
-          const listener = jest.fn();
-
-          const message = {
-            kind: MESSAGE_KIND.ONBOARDING_SESSION_COMMITTED,
-            data: null,
-          };
-
-          embed.on(MESSAGE_KIND.ONBOARDING_SESSION_COMMITTED, listener);
-
-          postMessage(message);
-
-          expect(listener).toHaveBeenCalledWith(message.data);
-        });
+        itCallsBoundListener(MESSAGE_KIND.ONBOARDING_SESSION_COMMITTED);
       });
 
       describe("toast", () => {
-        it("calls externally bound listener", () => {
-          const listener = jest.fn();
-
-          const message = {
-            kind: MESSAGE_KIND.TOAST,
-            data: {
-              kind: "success",
-              message: "Hello world",
-            },
-          };
-
-          embed.on(MESSAGE_KIND.TOAST, listener);
-
-          postMessage(message);
-
-          expect(listener).toHaveBeenCalledWith(message.data);
+        itCallsBoundListener(MESSAGE_KIND.TOAST, {
+          kind: "success",
+          message: "Hello world",
         });
       });
 
       describe("onboarding intents", () => {
-        it("calls externally bound listener", () => {
-          const listener = jest.fn();
-
-          const message = {
-            kind: MESSAGE_KIND.ONBOARDING_INTENT_COMPLETED,
-            data: null,
-          };
-
-          embed.on(MESSAGE_KIND.ONBOARDING_INTENT_COMPLETED, listener);
-
-          postMessage(message);
-
-          expect(listener).toHaveBeenCalledWith(message.data);
-        });
+        itCallsBoundListener(MESSAGE_KIND.ONBOARDING_INTENT_COMPLETED);
       });
 
       describe("onboarding step changes", () => {
-        it("calls externally bound listener", () => {
-          const listener = jest.fn();
-
-          const message = {
-            kind: MESSAGE_KIND.ONBOARDING_STEP_CHANGED,
-            data: {
-              current_step: "collect_super_details",
-              steps: [
-                "verify_phone_number",
-                "collect_employee_identity",
-                "collect_employee_contact_details",
-                "collect_employee_emergency_contact",
-                "collect_bank_accounts",
-                "collect_super_disclaimer",
-                "collect_super_details",
-              ],
-            },
-          };
-
-          embed.on(MESSAGE_KIND.ONBOARDING_STEP_CHANGED, listener);
-
-          postMessage(message);
-
-          expect(listener).toHaveBeenCalledWith(message.data);
+        itCallsBoundListener(MESSAGE_KIND.ONBOARDING_STEP_CHANGED, {
+          current_step: "collect_super_details",
+          steps: [
+            "verify_phone_number",
+            "collect_employee_identity",
+            "collect_employee_contact_details",
+            "collect_employee_emergency_contact",
+            "collect_bank_accounts",
+            "collect_super_disclaimer",
+            "collect_super_details",
+          ],
         });
       });
 
       describe("mfa verification complete event", () => {
-        it("calls the bound listener", () => {
-          const listener = jest.fn();
-
-          const message = {
-            kind: MESSAGE_KIND.MFA_VERIFICATION_COMPLETED,
-            data: {
-              verified_at: "2025-06-11T04:56:46.372459Z",
-              remote_id: null,
-            },
-          };
-
-          embed.on(MESSAGE_KIND.MFA_VERIFICATION_COMPLETED, listener);
-
-          postMessage(message);
-
-          expect(listener).toHaveBeenCalledWith(message.data);
+        itCallsBoundListener(MESSAGE_KIND.MFA_VERIFICATION_COMPLETED, {
+          verified_at: "2025-06-11T04:56:46.372459Z",
+          remote_id: null,
         });
       });
 
@@ -323,23 +231,10 @@ describe("Embed", () => {
           );
         });
 
-        it("calls externally bound listener", () => {
-          const listener = jest.fn();
-
-          const message = {
-            kind: MESSAGE_KIND.WINDOW_DIMENSION_CHANGE,
-            data: {
-              bounds: {
-                height: 200,
-              },
-            },
-          };
-
-          embed.on(MESSAGE_KIND.WINDOW_DIMENSION_CHANGE, listener);
-
-          postMessage(message);
-
-          expect(listener).toHaveBeenCalledWith(message.data);
+        itCallsBoundListener(MESSAGE_KIND.WINDOW_DIMENSION_CHANGE, {
+          bounds: {
+            height: 200,
+          },
         });
 
         it("sets the height of the iframe", () => {
@@ -376,20 +271,7 @@ describe("Embed", () => {
           );
         });
 
-        it("calls externally bound listener", () => {
-          const listener = jest.fn();
-
-          const message = {
-            kind: MESSAGE_KIND.PAGE_LOADED,
-            data: null,
-          };
-
-          embed.on(MESSAGE_KIND.PAGE_LOADED, listener);
-
-          postMessage(message);
-
-          expect(listener).toHaveBeenCalledWith(message.data);
-        });
+        itCallsBoundListener(MESSAGE_KIND.PAGE_LOADED);
 
         it("scrolls the iframe into view", () => {
           postMessage({
@@ -429,20 +311,7 @@ describe("Embed", () => {
           );
         });
 
-        it("calls externally bound listener", () => {
-          const listener = jest.fn();
-
-          const message = {
-            kind: MESSAGE_KIND.SCROLL_INTO_VIEW,
-            data: { offsetTop: 240 },
-          };
-
-          embed.on(MESSAGE_KIND.SCROLL_INTO_VIEW, listener);
-
-          postMessage(message);
-
-          expect(listener).toHaveBeenCalledWith(message.data);
-        });
+        itCallsBoundListener(MESSAGE_KIND.SCROLL_INTO_VIEW, { offsetTop: 240 });
 
         it("smooth-scrolls the iframe into view", () => {
           postMessage({
