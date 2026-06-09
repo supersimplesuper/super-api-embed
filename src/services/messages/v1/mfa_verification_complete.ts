@@ -1,4 +1,5 @@
 import { MESSAGE_KIND } from "../../messages";
+import type { MessageV1 } from "./message";
 
 export type Data = {
   /**
@@ -13,8 +14,4 @@ export type Data = {
  * have exceeded the maximum number of attempts. Successful attempts will have their
  * `verified_at` property as an ISO-8601 string, while failed attempts will be `null`.
  */
-export type Message = {
-  data: Data;
-  kind: MESSAGE_KIND.MFA_VERIFICATION_COMPLETED;
-  version: "v1";
-};
+export type Message = MessageV1<MESSAGE_KIND.MFA_VERIFICATION_COMPLETED, Data>;

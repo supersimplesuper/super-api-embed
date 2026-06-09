@@ -14,6 +14,7 @@ import type {
   Data as LoadedMessageDataV1,
   Message as LoadedMessageV1,
 } from "./services/messages/v1/loaded";
+import type { MessageV1 } from "./services/messages/v1/message";
 import type {
   Data as MfaVerificationCompleteDataV1,
   Message as MfaVerificationCompleteMessageV1,
@@ -53,6 +54,7 @@ import type {
 } from "./services/messages/v1/window_dimension_change";
 
 export { MESSAGE_KIND };
+export { MessageV1 };
 export { EmployerSettingsCommittedDataV1, EmployerSettingsCommittedMessageV1 };
 export { EmployerSettingsUpdatedDataV1, EmployerSettingsUpdatedMessageV1 };
 export { MfaVerificationCompleteDataV1, MfaVerificationCompleteMessageV1 };
