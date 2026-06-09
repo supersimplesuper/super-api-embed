@@ -14,6 +14,7 @@ import type {
   Data as LoadedMessageDataV1,
   Message as LoadedMessageV1,
 } from "./services/messages/v1/loaded";
+import type { MessageV1 } from "./services/messages/v1/message";
 import type {
   Data as MfaVerificationCompleteDataV1,
   Message as MfaVerificationCompleteMessageV1,
@@ -53,6 +54,7 @@ import type {
 } from "./services/messages/v1/window_dimension_change";
 
 export { MESSAGE_KIND };
+export { MessageV1 };
 export { EmployerSettingsCommittedDataV1, EmployerSettingsCommittedMessageV1 };
 export { EmployerSettingsUpdatedDataV1, EmployerSettingsUpdatedMessageV1 };
 export { MfaVerificationCompleteDataV1, MfaVerificationCompleteMessageV1 };
@@ -255,16 +257,6 @@ export class Embed {
     // embed code (currently we don't do anything in particular based on an
     // incoming message before we hand it over)
     switch (event.data.kind) {
-      case MESSAGE_KIND.EMPLOYER_SETTINGS_COMMITTED: {
-        this.bus.emit(event.data.kind, event.data.data);
-        break;
-      }
-
-      case MESSAGE_KIND.EMPLOYER_SETTINGS_UPDATED: {
-        this.bus.emit(event.data.kind, event.data.data);
-        break;
-      }
-
       case MESSAGE_KIND.LOADED: {
         this.bus.emit(event.data.kind, event.data.data);
 
@@ -275,31 +267,6 @@ export class Embed {
 
         this.embedSuccessfullyInitialized = true;
 
-        break;
-      }
-
-      case MESSAGE_KIND.MFA_VERIFICATION_COMPLETED: {
-        this.bus.emit(event.data.kind, event.data.data);
-        break;
-      }
-
-      case MESSAGE_KIND.ONBOARDING_INTENT_COMPLETED: {
-        this.bus.emit(event.data.kind, event.data.data);
-        break;
-      }
-
-      case MESSAGE_KIND.ONBOARDING_SESSION_COMMITTED: {
-        this.bus.emit(event.data.kind, event.data.data);
-        break;
-      }
-
-      case MESSAGE_KIND.ONBOARDING_SESSION_FINISHED: {
-        this.bus.emit(event.data.kind, event.data.data);
-        break;
-      }
-
-      case MESSAGE_KIND.ONBOARDING_STEP_CHANGED: {
-        this.bus.emit(event.data.kind, event.data.data);
         break;
       }
 
@@ -331,11 +298,6 @@ export class Embed {
         break;
       }
 
-      case MESSAGE_KIND.TOAST: {
-        this.bus.emit(event.data.kind, event.data.data);
-        break;
-      }
-
       case MESSAGE_KIND.WINDOW_DIMENSION_CHANGE: {
         const height = event.data.data.bounds.height;
 
@@ -348,10 +310,16 @@ export class Embed {
         break;
       }
 
+      // Remaining known kinds just forward to subscribers; the runtime check
+      // guards against malformed messages whose kind is outside the enum.
       default: {
-        log.warn(
-          `Received an unknown kind of message, was: ${JSON.stringify(event.data)}`,
-        );
+        if (Object.values(MESSAGE_KIND).includes(event.data.kind)) {
+          this.bus.emit(event.data.kind, event.data.data);
+        } else {
+          log.warn(
+            `Received an unknown kind of message, was: ${JSON.stringify(event.data)}`,
+          );
+        }
       }
     }
   }
