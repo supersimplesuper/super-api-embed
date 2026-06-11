@@ -5,4 +5,4 @@ const loglevel = {
   error: jest.fn(),
 };
 
-module.exports = loglevel;
+export default loglevel;
