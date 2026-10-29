@@ -170,7 +170,7 @@ export class Embed {
     this.iframe.setAttribute("data-testid", "iframe");
     this.iframe.setAttribute("scrolling", "no");
     this.iframe.style.overflow = "hidden";
-    this.iframe.allow = "fullscreen";
+    this.iframe.allow = "fullscreen; clipboard-read; clipboard-write";
 
     this.iframe.addEventListener("load", () => {
       this.responsiveTimer = setTimeout(() => {

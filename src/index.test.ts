@@ -91,6 +91,14 @@ describe("Embed", () => {
         expect(iframe).toHaveStyle({ overflow: "hidden" });
       });
 
+      it("allows fullscreen and clipboard access in the iframe", () => {
+        const scope = within(element);
+        const iframe = scope.getByTestId<HTMLIFrameElement>("iframe");
+        expect(iframe.allow).toBe(
+          "fullscreen; clipboard-read; clipboard-write",
+        );
+      });
+
       it("removes the loader element when the load event fires", () => {
         const scope = within(element);
         const loader = scope.getByTestId("loader");
